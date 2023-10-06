@@ -1,0 +1,74 @@
+[
+  {
+    "namespace": "com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.avrobeans",
+    "name": "EmployeeAvro",
+    "type": "record",
+    "fields": [
+      {
+        "name": "employeeId",
+        "type": "string"
+      },
+      {
+        "name": "firstname",
+        "type": "string"
+      },
+      {
+        "name": "lastname",
+        "type": "string"
+      },
+      {
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "name": "hireDate",
+        "type": "string"
+      },
+      {
+        "name": "state",
+        "type": "string"
+      },
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "addressId",
+        "type": "string"
+      },
+      {
+        "name": "address",
+        "type": {
+          "type": "record",
+          "name": "Address",
+          "fields": [
+            {
+              "name": "addressId",
+              "type": "string"
+            },
+            {
+              "name": "num",
+              "type": "int"
+            },
+            {
+              "name": "street",
+              "type": "string"
+            },
+            {
+              "name": "poBox",
+              "type": "int"
+            },
+            {
+              "name": "city",
+              "type": "string"
+            },
+            {
+              "name": "country",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

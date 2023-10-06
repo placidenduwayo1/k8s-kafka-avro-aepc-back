@@ -1,0 +1,106 @@
+{
+  "namespace": "com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.avrobeans",
+  "type": "record",
+  "name": "ProjectAvro",
+  "fields": [
+    {
+      "name": "projectId",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "priority",
+      "type": "int"
+    },
+    {
+      "name": "state",
+      "type": "string"
+    },
+    {
+      "name": "createdDate",
+      "type": "string"
+    },
+    {
+      "name": "employeeId",
+      "type": "string"
+    },
+    {
+      "name": "employee",
+      "type": {
+        "type": "record",
+        "name": "Employee",
+        "fields": [
+          {
+            "name": "employeeId",
+            "type": "string"
+          },
+          {
+            "name": "firstname",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "hireDate",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "companyId",
+      "type": "string"
+    },
+    {
+      "name": "company",
+      "type": {
+        "name": "Company",
+        "type": "record",
+        "fields": [
+          {
+            "name": "companyId",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "agency",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "connectedDate",
+            "type": "string"
+          }
+        ]
+      }
+    }
+
+  ]
+}

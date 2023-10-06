@@ -1,0 +1,19 @@
+server:
+  port: 8180
+spring:
+  application:
+    name: microservices-config-service
+  main:
+    banner-mode: off
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/placidenduwayo1/config-files-center.git
+          default-label: main
+          search-paths:
+            - for-utilities-configserver-registry-gateway
+            - for-k8s-kafka-avro-aepc-back-project
+  config:
+    activate:
+      on-profile: dev

@@ -1,0 +1,27 @@
+{
+  "namespace": "com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean",
+  "name": "CompanyAvro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "companyId",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "agency",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "connectedDate",
+      "type": "string"
+    }
+  ]
+}
