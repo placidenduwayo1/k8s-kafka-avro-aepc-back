@@ -115,7 +115,7 @@ pipeline {
             steps {
                 echo 'Start running microservices containers of the application'
                 script {
-                    sh 'docker compose -f aepc-bs-ms-backend-compose.yml up -d'
+                    sh 'docker compose -f utility-services-compose.yml up -d'
                 }
             }
         }
