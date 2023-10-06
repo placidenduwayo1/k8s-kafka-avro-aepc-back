@@ -42,7 +42,7 @@
   - run docker images of microservices of application in docker containers.
  
     ### ci/cd summary
-  ![my-ci-cd-flow](https://github.com/placidenduwayo1/k8s-kafka-avroschema-aepc-back/assets/124048212/1df23671-8138-4497-ad5a-7319334f73d5)
+![my-ci-cd-flow](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/b8e87f11-5a79-40c4-a132-9327ae0639dc)
 
  ### deployed microservices in docker images
  - kafka infrastructure:
@@ -66,7 +66,7 @@
 - a spring service uses kafka producer to send the kafka message to kafka topic.
 - a spring service uses kafka consumer to subscribe to the kafka topic and consumes the message from topics that it sends to another spring service either to persist it in db.
   ### kafka infra summary
-  ![kafka-infrastructure](https://github.com/placidenduwayo1/k8s-kafka-avroschema-aepc-back/assets/124048212/4129969f-de54-467c-a63f-dccd8f4bc884)
+![kafka-infrastructure](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/4cb3738e-718a-466c-9b59-41d4773a1a0b)
 
 - a schema registry (docker image) defines a schema for all events published into kafka topics
 - avro uses the defined and registered schema to serialize avents before publishing them into topics
