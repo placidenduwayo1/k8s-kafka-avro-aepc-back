@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  
+  #database images
   mysql-ms-dbs:
     image: mysql:8.0
     container_name: mysql-ms-dbs
@@ -18,7 +18,8 @@ services:
       retries: 20
     volumes:
       - persistence-dbs:/var/lib/mysql
-
+  
+  # kafka infrastructure
   zookeeper:
     image: zookeeper:3.4.9
     container_name: zookeeper
@@ -109,7 +110,26 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
-
+  
+  kafdrop-UI:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop-UI
+    restart: "no"
+    ports:
+      - "9001:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka-broker-1:19092,kafka-broker-2:29092,kafka-broker-3:39092
+    depends_on:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+    networks:
+      - kafka-network
+  
+  # schema registry for avro serialization
   schema-registry:
     image: confluentinc/cp-schema-registry:5.4.0
     hostname: schema-registry
@@ -128,27 +148,8 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-broker-1:19092,kafka-broker-2:29092,kafka-broker-3:39092
     networks:
       - kafka-network
-  
 
-  kafdrop-UI:
-    image: obsidiandynamics/kafdrop
-    container_name: kafdrop-UI
-    restart: "no"
-    ports:
-      - "9001:9000"
-    environment:
-      KAFKA_BROKERCONNECT: kafka-broker-1:19092,kafka-broker-2:29092,kafka-broker-3:39092
-    depends_on:
-      kafka-broker-1:
-        condition: service_healthy
-      kafka-broker-2:
-        condition: service_healthy
-      kafka-broker-3:
-        condition: service_healthy
-    networks:
-      - kafka-network
-
-  # spring boot utility microservices
+  # spring boot utility services
   microservices-config-service:
     image: placidenduwayo1/microservices-config-service:latest
     container_name: microservices-config-service
@@ -186,7 +187,6 @@ services:
       retries: 3
       start_period: 40s
   
-  # gateway microservice
   gateway-service:
     image: placidenduwayo1/gateway-service:latest
     container_name: gateway-service
@@ -200,7 +200,96 @@ services:
     depends_on:
       microservices-registry-service:
         condition: service_healthy
-        
+
+  # business microservices
+  k8s-kafka-avro-aepc-bs-ms-address:
+    image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-address:latest
+    container_name: k8s-kafka-avro-aepc-bs-ms-address
+    build:
+      context: ./AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-address
+      dockerfile: Dockerfile
+    ports:
+      - "8581:8581"
+    networks:
+      - kafka-network
+    depends_on:
+      mysql-ms-dbs:
+        condition: service_healthy
+      microservices-registry-service:
+        condition: service_healthy
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+
+  k8s-kafka-avro-aepc-bs-ms-company:
+    image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-company:latest
+    container_name: k8s-kafka-avro-aepc-bs-ms-company
+    build:
+      context: ./AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-company
+      dockerfile: Dockerfile
+    ports:
+      - "8583:8583"
+    networks:
+      - kafka-network
+    depends_on:
+      mysql-ms-dbs:
+        condition: service_healthy
+      microservices-registry-service:
+        condition: service_healthy
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+
+  k8s-kafka-avro-aepc-bs-ms-employee:
+    image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-employee:latest
+    container_name: k8s-kafka-avro-aepc-bs-ms-employee
+    build:
+      context: ./AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-employee
+      dockerfile: Dockerfile
+    ports:
+      - "8582:8582"
+    networks:
+      - kafka-network
+    depends_on:
+      mysql-ms-dbs:
+        condition: service_healthy
+      microservices-registry-service:
+        condition: service_healthy
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+  
+  k8s-kafka-avro-aepc-bs-ms-project:
+    image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-project:latest
+    container_name: k8s-kafka-avro-aepc-bs-ms-project
+    build:
+      context: ./AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project
+      dockerfile: Dockerfile
+    ports:
+      - "8584:8584"
+    networks:
+      - kafka-network
+    depends_on:
+      mysql-ms-dbs:
+        condition: service_healthy
+      microservices-registry-service:
+        condition: service_healthy
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+
 networks:
   kafka-network:
 volumes:
