@@ -8,16 +8,16 @@ pipeline {
         stage ('Build application services'){
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back.git']])
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-address/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-address/'){
                     sh 'mvn clean install' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-company/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-company/'){
                     sh 'mvn clean install' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-employee/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-employee/'){
                     sh 'mvn clean install' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-project/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                     sh 'mvn clean install' 
                 }
                 dir('Utility-Services/microservices-config-service/'){
@@ -32,16 +32,16 @@ pipeline {
             }
             post {
                 success {
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-address/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-address/'){
                         archiveArtifacts '**/target/*.jar'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-company/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-company/'){
                         archiveArtifacts '**/target/*.jar'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-employee/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-employee/'){
                         archiveArtifacts '**/target/*.jar'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-project/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                         archiveArtifacts '**/target/*.jar'
                     }
                     dir('Utility-Services/microservices-config-service/'){
@@ -61,31 +61,31 @@ pipeline {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back.git']])
                 echo 'starting run unit test'
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-address/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-address/'){
                     sh 'mvn test' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-company/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-company/'){
                     sh 'mvn test' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-employee/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-employee/'){
                     sh 'mvn test' 
                 }
-                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-project/'){
+                dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                     sh 'mvn test' 
                 }
             }
             post {
                 always {
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-address/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-address/'){
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-company/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-company/'){
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-employee/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-employee/'){
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-ms-project/'){
+                    dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
                 }
