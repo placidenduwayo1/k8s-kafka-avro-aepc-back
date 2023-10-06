@@ -65,7 +65,7 @@ public class Company {
                 ", name='" + name + '\'' +
                 ", agency='" + agency + '\'' +
                 ", type='" + type + '\'' +
-                ", connectedDate=" + connectedDate +
+                ", connected-date=" + connectedDate +
                 ']';
     }
 }

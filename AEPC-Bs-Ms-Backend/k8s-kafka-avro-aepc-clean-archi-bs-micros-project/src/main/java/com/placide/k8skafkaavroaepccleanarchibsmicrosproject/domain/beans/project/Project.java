@@ -120,10 +120,10 @@ public class Project {
                 ", description='" + description + '\'' +
                 ", priority=" + priority +
                 ", state='" + state + '\'' +
-                ", createdDate=" + createdDate +
-                ", employeeId='" + employeeId + '\'' +
+                ", created-date=" + createdDate +
+                ", employee-id='" + employeeId + '\'' +
                 ", employee=" + employee +
-                ", companyId='" + companyId + '\'' +
+                ", company-id='" + companyId + '\'' +
                 ", company=" + company +
                 ']';
     }
