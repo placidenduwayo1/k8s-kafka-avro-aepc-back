@@ -91,61 +91,31 @@ pipeline {
                 }
             }
         }
-        stage ('Build docker images:utility services'){
+        stage ('Build appli stack docker images'){
             steps {
-                echo 'Starting to build docker image'
+                echo 'Starting to build docker images of the application'
                 script {
-                    sh 'docker compose -f utility-services-compose.yml down'
-                    sh 'docker compose -f utility-services-compose.yml build'
+                    sh 'docker compose -f application-stack-compose.yml down'
+                    sh 'docker compose -f application-stack-compose.yml build'
                     sh 'docker system prune -f'
                 }
             }
         }
-        stage ('Publish docker images:utility services') {
+        stage ('Publish appli stack docker images') {
             steps {
                 echo 'Starting to publish docker images into docker registry'
                 script {
                     withDockerRegistry([ credentialsId: 'dockerhub-credentials', url: '' ]) {
-                        sh 'docker compose -f utility-services-compose.yml push'
+                        sh 'docker compose -f application-stack-compose.yml push'
                     }
                 }
             }
         }
-        stage ('Run utility services containers'){
+        stage ('Run application containers'){
             steps {
                 echo 'Start running microservices containers of the application'
                 script {
-                    sh 'docker compose -f utility-services-compose.yml up -d'
-                }
-            }
-        }
-        stage('Build docker images:bs-ms'){
-            steps {
-                echo 'Starting to build docker image'
-                script {
-                    sh 'docker compose -f aepc-bs-ms-backend-compose.yml down'
-                    sh 'docker compose -f aepc-bs-ms-backend-compose.yml build'
-                    sh 'docker system prune -f'
-                }
-            }
-        }
-        stage ('Publish docker images:bs-ms') {
-            steps {
-                echo 'Starting to publish docker images into docker registry'
-                script {
-                    withDockerRegistry([ credentialsId: 'dockerhub-credentials', url: '' ]) {
-                        sh 'docker compose -f aepc-bs-ms-backend-compose.yml push'
-                    }
-                }
-            }
-        }
-        stage ('Run docker images:bs-ms') {
-            steps {
-                echo 'Starting to publish docker images into docker registry'
-                script {
-                    withDockerRegistry([ credentialsId: 'dockerhub-credentials', url: '' ]) {
-                        sh 'docker compose -f aepc-bs-ms-backend-compose.yml up -d'
-                    }
+                    sh 'docker compose -f application-stack-compose.yml up -d'
                 }
             }
         }

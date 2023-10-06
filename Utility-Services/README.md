@@ -14,7 +14,3 @@ This project contains utility tools:
 
 ## database
 mysql- db to perist data
-
-the utility tools are deployed into docker containers: 
-    
-   ```docker compose -f utility-services-compose.yml up -d```
