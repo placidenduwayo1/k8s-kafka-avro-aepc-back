@@ -12,7 +12,6 @@ spring:
           uri: https://github.com/placidenduwayo1/config-files-center.git
           default-label: main
           search-paths:
-            - for-utilities-configserver-registry-gateway
             - for-k8s-kafka-avro-aepc-back-project
   config:
     activate:

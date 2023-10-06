@@ -153,7 +153,7 @@ services:
     image: placidenduwayo1/microservices-config-service:latest
     container_name: microservices-config-service
     build:
-      context: ./microservices-config-service
+      context: ./utility-Services/microservices-config-service
       dockerfile: Dockerfile
     ports:
       - "8180:8180"
@@ -170,7 +170,7 @@ services:
     image: placidenduwayo1/microservices-registry-service:latest
     container_name: microservices-registry-service
     build:
-      context: ./microservices-registry-service
+      context: ./utility-Services/microservices-registry-service
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
@@ -191,7 +191,7 @@ services:
     image: placidenduwayo1/gateway-service:latest
     container_name: gateway-service
     build:
-      context: ./gateway-service
+      context: ./utility-Services/gateway-service
       dockerfile: Dockerfile
     ports:
       - "8181:8181"
