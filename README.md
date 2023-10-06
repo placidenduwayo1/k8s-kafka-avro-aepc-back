@@ -26,6 +26,7 @@
   - schema registry: to define and register the schema of the event
   - avro schema:to serialize kafka events
   - kafdrop: a kafka UI
+  
 ## 3. database
 mysql- db for peristing data from business microservices
 # unit tests and deploment
