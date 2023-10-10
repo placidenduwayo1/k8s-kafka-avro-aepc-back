@@ -95,16 +95,10 @@ public class OutputEmployeeServiceImpl implements  OutputEmployeeService, Output
     }
 
     @Override
-    public String deleteEmployee(String employeeId) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
+    public String deleteEmployee(String employeeId) throws EmployeeNotFoundException {
         Employee bean = getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        Address address = AddressMapper.
-                toBean(addressProxy.loadRemoteApiGetAddressById(bean.getAddressId()).
-                        orElseThrow(RemoteApiAddressNotLoadedException::new));
-        bean.setAddress(address);
-        EmployeeAvro avro = EmployeeMapper.fromBeanToAvro(bean);
-        Employee consumed = consumeKafkaEventEmployeeDelete(avro,"avro-employee-deleted");
-        repository.deleteById(consumed.getEmployeeId());
-        return "employee <"+consumed+"> is deleted";
+        repository.deleteById(bean.getEmployeeId());
+        return "employee <"+bean+"> is deleted";
     }
 
     @Override

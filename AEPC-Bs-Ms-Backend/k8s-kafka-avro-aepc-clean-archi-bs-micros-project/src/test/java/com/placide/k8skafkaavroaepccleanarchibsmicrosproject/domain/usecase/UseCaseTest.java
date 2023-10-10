@@ -62,7 +62,9 @@ class UseCaseTest {
         project = Mapper.fromTo(projectDto);
         project.setProjectId(PROJECT_ID);
         project.setCreatedDate(Timestamp.from(Instant.now()).toString());
+        project.setEmployeeId(EMPLOYEE_ID);
         project.setEmployee(employee);
+        project.setCompanyId(COMPANY_ID);
         project.setCompany(company);
     }
 
@@ -139,17 +141,21 @@ class UseCaseTest {
     }
 
     @Test
-    void produceKafkaEventProjectDelete() throws ProjectNotFoundException {
+    void produceKafkaEventProjectDelete() throws ProjectNotFoundException, RemoteCompanyApiException, RemoteEmployeeApiException {
         //PREPARE
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
         //EXECUTE
         Mockito.when(outputProjectService.getProject(PROJECT_ID)).thenReturn(Optional.of(project));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
         Mockito.when(kafkaProducerService.produceKafkaEventProjectDelete(projectAvro)).thenReturn(projectAvro);
         Project actual = underTest.produceKafkaEventProjectDelete(PROJECT_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions", () -> {
-            Mockito.verify(outputProjectService, Mockito.atLeast(1)).getProject(PROJECT_ID);
-            Mockito.verify(kafkaProducerService, Mockito.atLeast(1)).produceKafkaEventProjectDelete(projectAvro);
+            Mockito.verify(outputProjectService, Mockito.atLeast(1))
+                    .getProject(PROJECT_ID);
+            Mockito.verify(kafkaProducerService, Mockito.atLeast(1))
+                    .produceKafkaEventProjectDelete(projectAvro);
             Assertions.assertEquals(projectAvro.getProjectId(),actual.getProjectId());
             Assertions.assertEquals(projectAvro.getEmployee().getEmployeeId(), actual.getEmployee().getEmployeeId());
             Assertions.assertEquals(projectAvro.getEmployee().getFirstname(), actual.getEmployee().getFirstname());
@@ -157,6 +163,10 @@ class UseCaseTest {
             Assertions.assertEquals(projectAvro.getCompany().getCompanyId(), actual.getCompany().getCompanyId());
             Assertions.assertEquals(projectAvro.getCompany().getName(), actual.getCompany().getName());
             Assertions.assertEquals(projectAvro.getCompany().getAgency(), actual.getCompany().getAgency());
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1))
+                    .getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1))
+                    .getRemoteCompanyAPI(COMPANY_ID);
         });
     }
 
@@ -171,7 +181,8 @@ class UseCaseTest {
         String msg = underTest.deleteProject(PROJECT_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1)).deleteProject(obtained.getProjectId()),
+                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1))
+                        .deleteProject(obtained.getProjectId()),
                 () -> Assertions.assertEquals("Project" + obtained + "successfully deleted", msg),
                 () -> Assertions.assertEquals(bean, obtained));
     }
@@ -184,17 +195,23 @@ class UseCaseTest {
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
         log.info("{}",projectAvro.toString());
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(projectDto.getEmployeeId())).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(projectDto.getCompanyId())).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID))
+                .thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID))
+                .thenReturn(Optional.of(company));
         Mockito.when(outputProjectService.getProject(PROJECT_ID)).thenReturn(Optional.of(project));
-        Mockito.when(kafkaProducerService.produceKafkaEventProjectEdit(projectAvro)).thenReturn(projectAvro);
+        Mockito.when(kafkaProducerService.produceKafkaEventProjectEdit(Mockito.any(ProjectAvro.class)))
+                .thenReturn(projectAvro);
         Project actual = underTest.produceKafkaEventProjectUpdate(projectDto, PROJECT_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",()->{
-            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(projectDto.getEmployeeId());
-            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(projectDto.getCompanyId());
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1))
+                    .getRemoteEmployeeAPI(projectDto.getEmployeeId());
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1))
+                    .getRemoteCompanyAPI(projectDto.getCompanyId());
             Mockito.verify(outputProjectService, Mockito.atLeast(1)).getProject(PROJECT_ID);
-            Mockito.verify(kafkaProducerService, Mockito.atLeast(1)).produceKafkaEventProjectEdit(projectAvro);
+            Mockito.verify(kafkaProducerService, Mockito.atLeast(1))
+                    .produceKafkaEventProjectEdit(Mockito.any(ProjectAvro.class));
             Assertions.assertNotNull(actual);
         });
     }

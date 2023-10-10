@@ -4,8 +4,9 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.beans.addre
 import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.exceptions.RemoteApiAddressNotLoadedException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RemoteInputAddressService {
-    Address getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException;
+    Optional<Address> getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException;
     List<Address> loadRemoteAllAddresses();
 }

@@ -117,6 +117,11 @@ public class UseCase implements InputAddressService {
         Validator.formatAddress(payload);
         checkAddressValidity(payload);
         Address address = getAddress(addressId).orElseThrow(AddressNotFoundException::new);
+        address.setNum(payload.getNum());
+        address.setStreet(payload.getStreet());
+        address.setPoBox(payload.getPoBox());
+        address.setCity(payload.getCity());
+        address.setCountry(payload.getCountry());
         AddressAvro addressAvro = AddressMapper.mapBeanToAvro(address);
         return AddressMapper.mapAvroToBean(outputKafkaProducerAddressService.sendKafkaAddressEditEvent(addressAvro));
     }

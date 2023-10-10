@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafdrop-UI
+  labels:
+    app: kafdrop-UI
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafdrop-UI
+  template:
+    metadata:
+      name: kafdrop-UI
+      labels:
+        app: kafdrop-UI
+    spec:
+      containers:
+        - name: kafdrop-UI
+          image: obsidiandynamics/kafdrop
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafdrop-UI
+  labels:
+    app: kafdrop-UI
+spec:
+  selector:
+    app: kafdrop-UI
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+  type: NodePort

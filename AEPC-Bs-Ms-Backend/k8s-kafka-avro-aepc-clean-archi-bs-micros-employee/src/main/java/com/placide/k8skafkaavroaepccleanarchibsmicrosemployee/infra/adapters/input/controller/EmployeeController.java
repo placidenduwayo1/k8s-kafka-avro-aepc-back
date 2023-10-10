@@ -29,7 +29,8 @@ public class EmployeeController {
 
        Employee consumed = inputEmployeeService.produceKafkaEventEmployeeCreate(employeeDto);
        Employee saved = inputEmployeeService.createEmployee(consumed);
-       Address address = remoteInputAddressService.getRemoteAddressById(consumed.getAddressId());
+       Address address = remoteInputAddressService.getRemoteAddressById(consumed.getAddressId())
+               .orElseThrow(RemoteApiAddressNotLoadedException::new);
        consumed.setAddress(address);
        saved.setAddress(address);
         return new ResponseEntity<>(String
@@ -39,7 +40,8 @@ public class EmployeeController {
     @GetMapping(value = "/employees/addresses/id/{addressId}")
     public Address getRemoteAddress(@PathVariable(name = "addressId") String addressId) throws
             RemoteApiAddressNotLoadedException{
-        return remoteInputAddressService.getRemoteAddressById(addressId);
+        return remoteInputAddressService.getRemoteAddressById(addressId)
+                .orElseThrow(RemoteApiAddressNotLoadedException::new);
     }
     @GetMapping(value = "/employees/addresses")
     public List<Address> getRemoteAddresses(){
@@ -81,7 +83,8 @@ public class EmployeeController {
     private List<Employee> setAddressToEmployee(List<Employee> employees){
         employees.forEach((var employee)->{
             try {
-                Address address = remoteInputAddressService.getRemoteAddressById(employee.getAddressId());
+                Address address = remoteInputAddressService.getRemoteAddressById(employee.getAddressId())
+                        .orElseThrow(RemoteApiAddressNotLoadedException::new);
                 employee.setAddress(address);
             } catch (RemoteApiAddressNotLoadedException e) {
               e.getMessage();

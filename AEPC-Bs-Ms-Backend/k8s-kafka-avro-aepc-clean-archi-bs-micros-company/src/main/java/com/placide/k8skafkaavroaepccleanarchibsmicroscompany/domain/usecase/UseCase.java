@@ -94,6 +94,9 @@ public class UseCase implements InputCompanyService {
         Validator.format(payload);
         checkPayloadValidity(payload);
         Company company = getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
+        company.setName(payload.getName());
+        company.setAgency(payload.getAgency());
+        company.setType(payload.getType());
         CompanyAvro companyAvro = CompanyMapper.fromBeanToAvro(company);
         return CompanyMapper.fromAvroToBean(kafkaProducerService.produceKafkaEventCompanyEdit(companyAvro));
     }

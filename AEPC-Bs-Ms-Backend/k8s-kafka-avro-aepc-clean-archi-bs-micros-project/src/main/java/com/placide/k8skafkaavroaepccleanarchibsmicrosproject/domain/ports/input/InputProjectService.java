@@ -14,7 +14,7 @@ public interface InputProjectService {
     Project createProject(Project project);
     Optional<Project> getProject(String projectId) throws ProjectNotFoundException;
     List<Project> loadProjectByInfo(String name, String desc, String state,String employeeId, String companyId);
-    Project produceKafkaEventProjectDelete(String projectId) throws ProjectNotFoundException;
+    Project produceKafkaEventProjectDelete(String projectId) throws ProjectNotFoundException, RemoteEmployeeApiException, RemoteCompanyApiException;
     String deleteProject(String projectId) throws ProjectNotFoundException;
     Project produceKafkaEventProjectUpdate(ProjectDto payload, String projectId) throws ProjectNotFoundException,
             ProjectPriorityInvalidException, ProjectStateInvalidException, RemoteEmployeeApiException, RemoteCompanyApiException,

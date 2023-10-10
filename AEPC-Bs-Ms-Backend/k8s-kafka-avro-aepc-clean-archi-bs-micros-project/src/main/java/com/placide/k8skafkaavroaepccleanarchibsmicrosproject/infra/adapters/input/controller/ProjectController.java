@@ -63,7 +63,8 @@ public class ProjectController {
         return setProjectDependency(projects);
     }
     @DeleteMapping(value = "/projects/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) throws ProjectNotFoundException {
+    public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) throws ProjectNotFoundException,
+            RemoteCompanyApiException, RemoteEmployeeApiException {
         Project consumed = inputProjectService.produceKafkaEventProjectDelete(id);
         inputProjectService.deleteProject(consumed.getProjectId());
         return new ResponseEntity<>(String

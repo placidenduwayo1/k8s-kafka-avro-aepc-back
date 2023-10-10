@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker-1
+  labels:
+    app: kafka-broker-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kafka-broker-1
+  template:
+    metadata:
+      name: kafka-broker-1
+      labels:
+        app: kafka-broker-1
+    spec:
+      hostname: kafka-broker-1
+      containers:
+        - name: kafka-broker-1
+          image: obsidiandynamics/kafka
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9092
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-broker-1
+  labels:
+    app: kafka-broker-1
+spec:
+  selector:
+    app: kafka-broker-1
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+  type: LoadBalancer

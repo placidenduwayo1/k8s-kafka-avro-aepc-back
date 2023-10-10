@@ -165,7 +165,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void delete() throws ProjectNotFoundException {
+    void delete() throws ProjectNotFoundException, RemoteCompanyApiException, RemoteEmployeeApiException {
         //PREPARE
         Project bean = Mapper.fromTo(dto);
         //EXECUTE

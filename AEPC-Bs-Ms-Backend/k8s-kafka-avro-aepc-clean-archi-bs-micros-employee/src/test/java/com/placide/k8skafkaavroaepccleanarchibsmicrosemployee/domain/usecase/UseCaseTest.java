@@ -103,12 +103,13 @@ class UseCaseTest {
     }
 
     @Test
-    void produceKafkaEventEmployeeDelete() throws EmployeeNotFoundException {
+    void produceKafkaEventEmployeeDelete() throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
         //PREPARE
         String employeeId = "uuid";
         //EXECUTE
         Mockito.when(employeeServiceMock.getEmployeeById(employeeId)).thenReturn(Optional.of(bean));
         Employee actual = underTest.getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(kafkaProducerMock.produceKafkaEventEmployeeDelete(avro)).thenReturn(avro);
         Employee produced = underTest.produceKafkaEventEmployeeDelete(employeeId);
         //VERIFY

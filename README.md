@@ -8,7 +8,7 @@
 - company-microservice
 - Project-microservice
 
-# utility services
+# utility tools
 
 ## 1. utility microservices
 - microservices-config-service: to centralize and distribute all microservices configurations
@@ -19,16 +19,16 @@
 - a kafka infrastructure to publish and distribute events.
 - each writing event in database (POST, DELETE, UPDATE) is distributed into kafka topics.
 - **schema registry** to difine schema for all events and **avro** to serialiaze events sent to topics
-- kafdrop is used as UI for managing and exploring kafka events, kafka servers,...
+- **kafdrop** is used as UI for managing and exploring kafka events, kafka servers,...
 - kafka infrastructure:
   - zookeeper: to manage kafka brokers
-  - kafka-server(3 brokers):  to publish events into topics and disbribute events to consumers
-  - schema registry: to define and register the schema of the event
+  - kafka-server(3 brokers), **kafka-broker-1**, **kafka-broker-2**, **kafka-broker-3**: publish events into topics and disbribute events to consumers
+  - schema registry: defines and register a common schema of the all events
   - avro schema:to serialize kafka events
   - kafdrop: a kafka UI
-  
+
 ## 3. database
-mysql- db for peristing data from business microservices
+mysql database docker image for peristing data from business microservices
 # unit tests and deploment
 - each code unit of business microservices is tested with **JUnit5** and **AssertJ**.
 - **Mockito** is used to mock external unit dependency.

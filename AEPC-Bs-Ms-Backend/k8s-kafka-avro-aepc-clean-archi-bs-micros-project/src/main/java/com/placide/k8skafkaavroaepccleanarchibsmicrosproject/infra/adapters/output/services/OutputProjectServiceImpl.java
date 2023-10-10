@@ -81,10 +81,8 @@ public class OutputProjectServiceImpl implements OutputProjectService, OutputRem
     @Override
     public String deleteProject(String projectId) throws ProjectNotFoundException {
         Project saved = getProject(projectId).orElseThrow(ProjectNotFoundException::new);
-        ProjectAvro projectAvro = Mapper.fromBeanToAvro(saved);
-        Project consumed = consumeKafkaEventProjectDelete(projectAvro,"avro-projects-deleted");
-        repository.deleteById(consumed.getProjectId());
-        return "project <"+consumed+"> is deleted";
+        repository.deleteById(saved.getProjectId());
+        return "project <"+saved+"> is deleted";
     }
 
     @Override
