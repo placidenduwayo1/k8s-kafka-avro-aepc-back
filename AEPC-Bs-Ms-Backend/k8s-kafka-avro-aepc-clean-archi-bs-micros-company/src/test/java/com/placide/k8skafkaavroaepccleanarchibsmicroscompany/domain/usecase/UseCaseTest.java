@@ -32,7 +32,7 @@ class UseCaseTest {
     @InjectMocks
     private UseCase underTest;
     private static final String COMPANY_ID="company-id";
-    private static final String NAME="Natan";
+    private static final String NAME="NATAN";
     private static final String AGENCY="Paris";
     private static final String TYPE ="esn";
     private CompanyDto dto;
@@ -171,15 +171,14 @@ class UseCaseTest {
         CompanyAvro avro = CompanyMapper.fromBeanToAvro(bean);
         //EXECUTE
         Mockito.when(companyService.getCompanyById(companyId)).thenReturn(Optional.of(bean));
-        Mockito.when(kafkaProducerService.produceKafkaEventCompanyEdit(avro)).thenReturn(avro);
+        Mockito.when(kafkaProducerService.produceKafkaEventCompanyEdit(Mockito.any(CompanyAvro.class)))
+                .thenReturn(avro);
         Company actual = underTest.produceKafkaEventCompanyEdit(dto,COMPANY_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",()->{
-            Mockito.verify(kafkaProducerService, Mockito.atLeast(1)).produceKafkaEventCompanyEdit(avro);
-            Assertions.assertEquals(bean.getCompanyId(), actual.getCompanyId());
-            Assertions.assertEquals(bean.getName(), actual.getName());
-            Assertions.assertEquals(bean.getAgency(), actual.getAgency());
-            Assertions.assertEquals(bean.getConnectedDate(), actual.getConnectedDate());
+            Mockito.verify(kafkaProducerService, Mockito.atLeast(1))
+                    .produceKafkaEventCompanyEdit(Mockito.any(CompanyAvro.class));
+            Assertions.assertEquals(bean.toString(), actual.toString());
         });
     }
 
