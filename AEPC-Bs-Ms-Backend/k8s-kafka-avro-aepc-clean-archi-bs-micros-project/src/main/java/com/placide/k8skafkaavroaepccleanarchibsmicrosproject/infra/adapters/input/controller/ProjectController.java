@@ -28,7 +28,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/projects")
-    public ResponseEntity<Object> produceConsumeAndSave(@RequestBody ProjectDto dto) throws RemoteCompanyApiException,
+    public List<String> produceConsumeAndSave(@RequestBody ProjectDto dto) throws RemoteCompanyApiException,
             ProjectPriorityInvalidException, ProjectAlreadyExistsException, RemoteEmployeeApiException, ProjectStateInvalidException,
             ProjectFieldsEmptyException {
         Project consumed = inputProjectService.produceKafkaEventProjectCreate(dto);
@@ -39,10 +39,10 @@ public class ProjectController {
                 .orElseThrow(RemoteCompanyApiException::new);
         consumed.setEmployee(remoteEmployee);
         consumed.setCompany(remoteCompany);
+        saved.setCompany(remoteCompany);
+        saved.setEmployee(remoteEmployee);
 
-        return new ResponseEntity<>(String
-                .format("%s is sent and consumed;%n %s is saved in db", consumed, saved),
-                HttpStatus.OK);
+        return List.of("consumed: "+consumed,"saved: "+saved);
     }
     @GetMapping(value = "/projects")
     public List<Project> getAllProjects(){
@@ -68,18 +68,15 @@ public class ProjectController {
         Project consumed = inputProjectService.produceKafkaEventProjectDelete(id);
         inputProjectService.deleteProject(consumed.getProjectId());
         return new ResponseEntity<>(String
-                .format("<%s> to delete is sent to topic, %n <%s> is deleted from db", consumed, id),
+                .format("<%s> deleted from db", consumed),
                 HttpStatus.OK);
     }
     @PutMapping(value = "/projects/{id}")
-    public ResponseEntity<Object> update(@PathVariable(name = "id") String id, @RequestBody ProjectDto dto) throws ProjectNotFoundException,
+    public List<String> update(@PathVariable(name = "id") String id, @RequestBody ProjectDto dto) throws ProjectNotFoundException,
             RemoteCompanyApiException, ProjectPriorityInvalidException, RemoteEmployeeApiException, ProjectStateInvalidException, ProjectFieldsEmptyException {
         Project consumed = inputProjectService.produceKafkaEventProjectUpdate(dto, id);
         Project saved = inputProjectService.updateProject(consumed);
-        return new ResponseEntity<>(String
-                .format("<%s> to update is sent and consumed;%n <%s> is updated in db",
-                        consumed, saved),
-                HttpStatus.OK);
+        return List.of("consumed: "+consumed,"saved: "+saved);
     }
     private List<Project> setProjectDependency(List<Project> projects){
         projects.forEach((var project)->{

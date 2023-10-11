@@ -64,7 +64,7 @@ class ProjectControllerTest {
         Mockito.when(inputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
         Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(Optional.of(company));
         Mockito.when(inputProjectService.produceKafkaEventProjectCreate(Mockito.any(ProjectDto.class))).thenReturn(bean);
-        ResponseEntity<Object> msg = underTest.produceConsumeAndSave(dto);
+        List<String> consumedAndSaved = underTest.produceConsumeAndSave(dto);
         Mockito.when(inputProjectService.createProject(Mockito.any(Project.class))).thenReturn(bean);
 
         //VERIFY
@@ -73,7 +73,7 @@ class ProjectControllerTest {
             Mockito.verify(inputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).produceKafkaEventProjectCreate(dto);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).createProject(bean);
-            Assertions.assertNotNull(msg);
+            Assertions.assertNotNull(consumedAndSaved);
             Assertions.assertNotNull(bean.getCompany());
             Assertions.assertNotNull(bean.getEmployee());
         });
@@ -193,13 +193,13 @@ class ProjectControllerTest {
         Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(Optional.of(company));
         Mockito.when(inputProjectService.produceKafkaEventProjectUpdate(dto,PROJECT_ID)).thenReturn(bean);
         Mockito.when(inputProjectService.updateProject(actual)).thenReturn(new Project());
-        ResponseEntity<Object> msg = underTest.update(PROJECT_ID, dto);
+        List<String> consumedAndSaved = underTest.update(PROJECT_ID, dto);
         //VERIFY
         Assertions.assertAll("assertions",()->{
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).getProject(PROJECT_ID);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).produceKafkaEventProjectUpdate(dto, PROJECT_ID);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).updateProject(actual);
-            Assertions.assertNotNull(msg);
+            Assertions.assertNotNull(consumedAndSaved);
         });
     }
 }
