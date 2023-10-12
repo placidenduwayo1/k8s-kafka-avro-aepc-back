@@ -51,7 +51,7 @@ mysql database docker image for peristing data from business microservices
  - kafka infrastructure:
   - zookeeper (one instance) for managing kafka brokers
   - kafka server (three instances)
-  - kafdrop (one instance) for web UI to view kafka brokers, topics and events produced
+  - kafdrop (one instance) for web UI for monitoring kafka brokers, topics and events produced
 - utility microservices:
   - a config service for managing and externalize services configuration
   - a registry service to serve gateway service and business services to registry with their name
@@ -62,6 +62,16 @@ mysql database docker image for peristing data from business microservices
   - bs-ms-employee
   - bs-ms-company
   - bs-ms-project
+
+### containers orchestration with Kubernetes
+all containers of the application are deployed and orchestrated in local minikube cluster
+- database: mysql-db
+- zookeeper
+- kafka servers: kafka-broker-1, kafka-broker-2,kafka-broker-3
+- schema-regsitry
+- kafdrop UI
+- utility services containers: config-service, gateway-service
+- business-microservices containers: bs-ms-address, bs-ms-employee, bs-ms-company, bs-ms-project
 
     
 ## architecture kafka inside business microservice

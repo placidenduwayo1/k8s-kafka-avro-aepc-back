@@ -111,13 +111,5 @@ pipeline {
                 }
             }
         }
-        stage ('Run application containers'){
-            steps {
-                echo 'Start running microservices containers of the application'
-                script {
-                    sh 'docker compose -f application-stack-compose.yml up -d'
-                }
-            }
-        }
     }
 }
