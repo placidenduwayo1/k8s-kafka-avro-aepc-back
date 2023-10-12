@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker-2
+  labels:
+    app: kafka-broker-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-broker-2
+  template:
+    metadata:
+      name: kafka-broker-2
+      labels:
+        app: kafka-broker-2
+    spec:
+      hostname: kafka-broker-2
+      containers:
+        - name: kafka-broker-2
+          image: obsidiandynamics/kafka
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9093
+          env:
+            - name: KAFKA_BROKER_ID
+              value: '1'
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: 'zookeeper:2181'
+            - name: KAFKA_LISTENERS
+              value: PLAINTEXT://:9093,PLAINTEXT_HOST://0.0.0.0:29092
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafka-broker-2:9093,PLAINTEXT_HOST://localhost:29092
+
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-broker-2
+  labels:
+    app: kafka-broker-2
+spec:
+  selector:
+    app: kafka-broker-2
+  ports:
+    - protocol: TCP
+      port: 9093
+      targetPort: 9093
+  type: LoadBalancer
