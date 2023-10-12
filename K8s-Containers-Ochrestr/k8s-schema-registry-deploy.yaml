@@ -25,7 +25,7 @@ spec:
             - name: SCHEMA_REGISTRY_HOST_NAME
               value: schema-registry
             - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
-              value: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT://kafka-broker-1:9093,PLAINTEXT://kafka-broker-1:9094
+              value: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT://kafka-broker-2:9093,PLAINTEXT://kafka-broker-3:9094
       restartPolicy: Always
 ---
 apiVersion: v1

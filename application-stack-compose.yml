@@ -131,9 +131,14 @@ services:
     networks:
       - kafka-network
     
-  kafka-UI:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-UI
+  kafdrop-UI:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop-UI
+    restart: "no"
+    ports:
+      - "9001:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
     depends_on:
       kafka-broker-1:
         condition: service_healthy
@@ -141,9 +146,8 @@ services:
         condition: service_healthy
       kafka-broker-3:
         condition: service_healthy
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
+    networks:
+      - kafka-network
 
   # spring boot utility services
   microservices-config-service:
