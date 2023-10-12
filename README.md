@@ -73,6 +73,8 @@ all containers of the application are deployed and orchestrated in local minikub
 - utility services containers: config-service, gateway-service
 - business-microservices containers: bs-ms-address, bs-ms-employee, bs-ms-company, bs-ms-project
 
+the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
+
     
 ## architecture kafka inside business microservice
 - a model is a java bean that is sent as payload using a REST api, a spring service build a kafka message with the model.
