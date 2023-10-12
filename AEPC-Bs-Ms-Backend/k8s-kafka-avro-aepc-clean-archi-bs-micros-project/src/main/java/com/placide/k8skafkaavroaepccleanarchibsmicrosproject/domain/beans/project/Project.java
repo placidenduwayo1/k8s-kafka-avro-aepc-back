@@ -115,16 +115,14 @@ public class Project {
     @Override
     public String toString() {
         return "Project[" +
-                "uuid='" + projectId + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", priority=" + priority +
-                ", state='" + state + '\'' +
-                ", created-date=" + createdDate +
-                ", employee-id='" + employeeId + '\'' +
-                ", employee=" + employee +
-                ", company-id='" + companyId + '\'' +
-                ", company=" + company +
+                "id:'" + projectId + '\'' +
+                ", name:'" + name + '\'' +
+                ", description:'" + description + '\'' +
+                ", priority:" + priority +
+                ", state:'" + state + '\'' +
+                ", created-date:" + createdDate +
+                ", employee:" + employee +
+                ", company:" + company +
                 ']';
     }
 }

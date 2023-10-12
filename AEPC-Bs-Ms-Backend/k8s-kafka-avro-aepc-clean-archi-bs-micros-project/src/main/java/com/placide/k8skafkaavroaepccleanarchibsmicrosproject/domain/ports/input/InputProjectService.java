@@ -11,7 +11,7 @@ public interface InputProjectService {
     Project produceKafkaEventProjectCreate(ProjectDto dto) throws ProjectAlreadyExistsException,
             ProjectPriorityInvalidException, ProjectStateInvalidException, RemoteEmployeeApiException, RemoteCompanyApiException,
             ProjectFieldsEmptyException;
-    Project createProject(Project project);
+    Project createProject(Project project) throws RemoteCompanyApiException, RemoteEmployeeApiException;
     Optional<Project> getProject(String projectId) throws ProjectNotFoundException;
     List<Project> loadProjectByInfo(String name, String desc, String state,String employeeId, String companyId);
     Project produceKafkaEventProjectDelete(String projectId) throws ProjectNotFoundException, RemoteEmployeeApiException, RemoteCompanyApiException;
@@ -19,7 +19,7 @@ public interface InputProjectService {
     Project produceKafkaEventProjectUpdate(ProjectDto payload, String projectId) throws ProjectNotFoundException,
             ProjectPriorityInvalidException, ProjectStateInvalidException, RemoteEmployeeApiException, RemoteCompanyApiException,
             ProjectFieldsEmptyException;
-    Project updateProject (Project payload);
+    Project updateProject (Project payload) throws RemoteCompanyApiException, RemoteEmployeeApiException;
     List<Project> loadProjectsAssignedToEmployee(String employeeId) throws RemoteEmployeeApiException;
     List<Project> loadProjectsOfCompanyC(String companyId) throws RemoteCompanyApiException;
 

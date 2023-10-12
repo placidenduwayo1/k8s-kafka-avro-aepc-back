@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-ms-dbs
+  labels:
+    app: mysql-ms-dbs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-ms-dbs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: mysql-ms-dbs
+      labels:
+        app: mysql-ms-dbs
+    spec:
+      containers:
+        - name: mysql-ms-dbs
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-root-mdp
+                  name: mysql-db-secret
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-ms-dbs
+spec:
+  selector:
+    app: mysql-ms-dbs
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: NodePort

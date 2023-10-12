@@ -83,13 +83,13 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee-API [" +
-                "id='" + employeeId + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", hire-date='" + hireDate + '\'' +
-                ", state='" + state + '\'' +
-                ", type='" + type + '\'' +
+                "id:'" + employeeId + '\'' +
+                ", firstname:'" + firstname + '\'' +
+                ", lastname:'" + lastname + '\'' +
+                ", email:'" + email + '\'' +
+                ", hire-date:'" + hireDate + '\'' +
+                ", state:'" + state + '\'' +
+                ", type:'" + type + '\'' +
                 ']';
     }
 }

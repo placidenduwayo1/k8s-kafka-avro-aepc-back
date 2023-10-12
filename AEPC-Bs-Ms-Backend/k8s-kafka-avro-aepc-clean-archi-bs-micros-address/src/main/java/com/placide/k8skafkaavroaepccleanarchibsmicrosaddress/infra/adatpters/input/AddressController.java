@@ -21,14 +21,12 @@ public class AddressController {
     private final InputAddressService inputAddressService;
 
     @PostMapping(value = "/addresses")
-    public ResponseEntity<Object> produceAndConsumeAddress(@RequestBody AddressDto addressDto) throws
+    public List<String> produceAndConsumeAddress(@RequestBody AddressDto addressDto) throws
             AddressAlreadyExistsException, AddressFieldsInvalidException {
 
         Address producedConsumedAddress = inputAddressService.produceAndConsumeAddressAdd(addressDto);
         Address savedAddress = inputAddressService.saveInDbConsumedAddress(producedConsumedAddress);
-        return new ResponseEntity<>(String
-                .format("%s is sent and consumed;%n %s is saved in db", producedConsumedAddress, savedAddress),
-                HttpStatus.OK);
+        return List.of("produced consumed:"+producedConsumedAddress,"saved:"+savedAddress);
     }
 
     @GetMapping(value = "/addresses")

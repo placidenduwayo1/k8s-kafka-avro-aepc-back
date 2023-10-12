@@ -23,19 +23,13 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/employees")
-    public ResponseEntity<Object> produceConsumeAndSaveEmployee(@RequestBody EmployeeDto employeeDto) throws
+    public List<String> produceConsumeAndSaveEmployee(@RequestBody EmployeeDto employeeDto) throws
             EmployeeTypeInvalidException, EmployeeEmptyFieldsException, EmployeeStateInvalidException,
             RemoteApiAddressNotLoadedException, EmployeeAlreadyExistsException {
 
        Employee consumed = inputEmployeeService.produceKafkaEventEmployeeCreate(employeeDto);
        Employee saved = inputEmployeeService.createEmployee(consumed);
-       Address address = remoteInputAddressService.getRemoteAddressById(consumed.getAddressId())
-               .orElseThrow(RemoteApiAddressNotLoadedException::new);
-       consumed.setAddress(address);
-       saved.setAddress(address);
-        return new ResponseEntity<>(String
-                .format("%s is sent and consumed;%n %s is saved in db", consumed, saved),
-                HttpStatus.OK);
+        return List.of("produced consumed:"+consumed,"saved:"+saved);
     }
     @GetMapping(value = "/employees/addresses/id/{addressId}")
     public Address getRemoteAddress(@PathVariable(name = "addressId") String addressId) throws
@@ -71,14 +65,11 @@ public class EmployeeController {
                 HttpStatus.OK);
     }
     @PutMapping(value = "/employees/{id}")
-    public ResponseEntity<Object> update(@PathVariable(name = "id") String id, @RequestBody EmployeeDto dto) throws EmployeeTypeInvalidException,
+    public List<String> update(@PathVariable(name = "id") String id, @RequestBody EmployeeDto dto) throws EmployeeTypeInvalidException,
             EmployeeEmptyFieldsException, EmployeeStateInvalidException, RemoteApiAddressNotLoadedException, EmployeeNotFoundException {
         Employee consumed = inputEmployeeService.produceKafkaEventEmployeeEdit(dto,id);
         Employee saved = inputEmployeeService.editEmployee(consumed);
-        return new ResponseEntity<>(String
-                .format("<%s> to update is sent and consumed;%n <%s> is updated in db",
-                        consumed, saved),
-                HttpStatus.OK);
+        return List.of("produced consumed:"+consumed,"saved:"+saved);
     }
     private List<Employee> setAddressToEmployee(List<Employee> employees){
         employees.forEach((var employee)->{

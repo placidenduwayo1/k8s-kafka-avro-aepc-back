@@ -23,14 +23,12 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/companies")
-    public ResponseEntity<Object> produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
+    public List<String> produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
             CompanyEmptyFieldsException, CompanyAlreadyExistsException, CompanyTypeInvalidException {
 
         Company consumed = companyService.produceKafkaEventCompanyCreate(dto);
         Company saved = companyService.createCompany(consumed);
-        return new ResponseEntity<>(String
-                .format("<%s> is sent and consumed;%n <%s> is saved in db", consumed, saved),
-                HttpStatus.OK);
+        return List.of("produced consumed:"+consumed,"saved:"+saved);
     }
     @GetMapping(value = "/companies")
     public List<Company> loadAllCompanies(){

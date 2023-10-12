@@ -1,37 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafdrop-UI
+  name: kafdrop-ui
   labels:
-    app: kafdrop-UI
+    app: kafdrop-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafdrop-UI
+      app: kafdrop-ui
   template:
     metadata:
-      name: kafdrop-UI
+      name: kafdrop-ui
       labels:
-        app: kafdrop-UI
+        app: kafdrop-ui
     spec:
       containers:
-        - name: kafdrop-UI
+        - name: kafdrop-ui
           image: obsidiandynamics/kafdrop
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000
+          env:
+            - name: KAFKA_BROKERCONNECT
+              value : kafka-broker-1:9092,kafka-broker-1:9093,kafka-broker-1:9094
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafdrop-UI
+  name: kafdrop-ui
   labels:
-    app: kafdrop-UI
+    app: kafdrop-ui
 spec:
   selector:
-    app: kafdrop-UI
+    app: kafdrop-ui
   ports:
     - protocol: TCP
       port: 9000

@@ -95,7 +95,7 @@ class UseCaseTest {
     }
 
     @Test
-    void createProject() {
+    void createProject() throws RemoteCompanyApiException, RemoteEmployeeApiException {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE
@@ -217,7 +217,7 @@ class UseCaseTest {
     }
 
     @Test
-    void updateProject() {
+    void updateProject() throws RemoteCompanyApiException, RemoteEmployeeApiException {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE

@@ -33,15 +33,6 @@ public class ProjectController {
             ProjectFieldsEmptyException {
         Project consumed = inputProjectService.produceKafkaEventProjectCreate(dto);
         Project saved = inputProjectService.createProject(consumed);
-        Employee remoteEmployee = inputRemoteApiEmployeeService.getRemoteEmployeeAPI(consumed.getEmployeeId())
-                .orElseThrow(RemoteEmployeeApiException::new);
-        Company remoteCompany = inputRemoteApiCompanyService.getRemoteApiCompany(consumed.getCompanyId())
-                .orElseThrow(RemoteCompanyApiException::new);
-        consumed.setEmployee(remoteEmployee);
-        consumed.setCompany(remoteCompany);
-        saved.setCompany(remoteCompany);
-        saved.setEmployee(remoteEmployee);
-
         return List.of("consumed: "+consumed,"saved: "+saved);
     }
     @GetMapping(value = "/projects")
@@ -73,7 +64,8 @@ public class ProjectController {
     }
     @PutMapping(value = "/projects/{id}")
     public List<String> update(@PathVariable(name = "id") String id, @RequestBody ProjectDto dto) throws ProjectNotFoundException,
-            RemoteCompanyApiException, ProjectPriorityInvalidException, RemoteEmployeeApiException, ProjectStateInvalidException, ProjectFieldsEmptyException {
+            RemoteCompanyApiException, ProjectPriorityInvalidException, RemoteEmployeeApiException, ProjectStateInvalidException,
+            ProjectFieldsEmptyException {
         Project consumed = inputProjectService.produceKafkaEventProjectUpdate(dto, id);
         Project saved = inputProjectService.updateProject(consumed);
         return List.of("consumed: "+consumed,"saved: "+saved);

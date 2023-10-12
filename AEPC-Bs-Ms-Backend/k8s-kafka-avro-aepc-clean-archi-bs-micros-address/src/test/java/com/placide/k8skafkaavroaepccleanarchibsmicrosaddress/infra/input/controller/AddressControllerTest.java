@@ -5,6 +5,7 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.domain.exceptions.A
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.domain.exceptions.AddressNotFoundException;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.domain.ports.input.InputAddressService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.infra.adatpters.input.AddressController;
+import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.infra.adatpters.output.mapper.AddressMapper;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.infra.adatpters.output.models.AddressDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,15 +37,15 @@ class AddressControllerTest {
     @Test
     void produceAndConsumeAddress() throws AddressAlreadyExistsException {
         //PREPARE
-
+        AddressDto addressDto = AddressMapper.mapBeanToDto(address);
         //EXECUTE
-        Mockito.when(inputAddressServiceMock.produceAndConsumeAddressAdd(Mockito.any(AddressDto.class))).thenReturn(address);
-        ResponseEntity<Object> response = underTest.produceAndConsumeAddress(Mockito.any(AddressDto.class));
+        Mockito.when(inputAddressServiceMock.produceAndConsumeAddressAdd(addressDto)).thenReturn(address);
+        List<String> consumedAndSaved = underTest.produceAndConsumeAddress(addressDto);
         //VERIFY
         Assertions.assertAll("props",()->{
-            Assertions.assertEquals(200,response.getStatusCode().value());
-            Mockito.verify(inputAddressServiceMock, Mockito.atLeast(1)).produceAndConsumeAddressAdd(Mockito.any());
-            Mockito.verify(inputAddressServiceMock, Mockito.atLeast(1)).saveInDbConsumedAddress(Mockito.any());
+            Mockito.verify(inputAddressServiceMock, Mockito.atLeast(1)).produceAndConsumeAddressAdd(addressDto);
+            Mockito.verify(inputAddressServiceMock, Mockito.atLeast(1)).saveInDbConsumedAddress(address);
+            Assertions.assertEquals(2, consumedAndSaved.size());
         });
     }
 

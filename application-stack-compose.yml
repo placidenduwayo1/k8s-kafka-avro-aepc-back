@@ -36,21 +36,21 @@ services:
       retries: 3
       start_period: 10s
 
-  kafka-broker:
+  kafka-broker-1:
     image: obsidiandynamics/kafka
-    container_name: kafka-broker
+    container_name: kafka-broker-1
     networks:
       - kafka-network
     ports:
       - "9092:9092"
       - "19092:19092"
     environment:
-      KAFKA_BROKER_ID: 1
+      KAFKA_BROKER_ID: 0
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       ALLOW_PLAINTEXT_LISTENER: yes
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://0.0.0.0:19092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT_HOST://localhost:19092
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -60,20 +60,74 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+
+  kafka-broker-2:
+    image: obsidiandynamics/kafka
+    container_name: kafka-broker-2
+    networks:
+      - kafka-network
+    ports:
+      - "9093:9093"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:9093,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-2:9093,PLAINTEXT_HOST://localhost:29092
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: nc -z localhost 9093 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  kafka-broker-3:
+    image: obsidiandynamics/kafka
+    container_name: kafka-broker-3
+    networks:
+      - kafka-network
+    ports:
+      - "9094:9094"
+      - "39092:39092"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:9094,PLAINTEXT_HOST://0.0.0.0:39092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9094,PLAINTEXT_HOST://localhost:39092
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: nc -z localhost 9094 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
   
   # schema registry for avro serialization
-  schema-registry:
+  schema-registry-service:
     image: confluentinc/cp-schema-registry:5.4.0
     hostname: schema-registry
-    container_name: schema-registry
+    container_name: schema-registry-service
     depends_on:
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     ports:
       - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-broker:9092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
     networks:
       - kafka-network
     
@@ -84,9 +138,13 @@ services:
     ports:
       - "9001:9000"
     environment:
-      KAFKA_BROKERCONNECT: kafka-broker:9092
+      KAFKA_BROKERCONNECT: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
     depends_on:
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     networks:
       - kafka-network
@@ -159,10 +217,14 @@ services:
         condition: service_healthy
       microservices-registry-service:
         condition: service_healthy
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
 
   k8s-kafka-avro-aepc-bs-ms-company:
     image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-company:latest
@@ -179,10 +241,14 @@ services:
         condition: service_healthy
       microservices-registry-service:
         condition: service_healthy
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
 
   k8s-kafka-avro-aepc-bs-ms-employee:
     image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-employee:latest
@@ -199,10 +265,14 @@ services:
         condition: service_healthy
       microservices-registry-service:
         condition: service_healthy
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
   
   k8s-kafka-avro-aepc-bs-ms-project:
     image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-project:latest
@@ -219,10 +289,14 @@ services:
         condition: service_healthy
       microservices-registry-service:
         condition: service_healthy
-      kafka-broker:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
         condition: service_healthy
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
 
 networks:
   kafka-network:

@@ -59,6 +59,12 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
         }
     }
 
+    private void setEmployeeDependency(Employee employee, String addressId) throws RemoteApiAddressNotLoadedException {
+        Address address = getRemoteAddressById(addressId).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        employee.setAddressId(addressId);
+        employee.setAddress(address);
+    }
+
     //kafka producer employee create, edit and delete events
     @Override
     public Employee produceKafkaEventEmployeeCreate(EmployeeDto employeeDto) throws
@@ -73,23 +79,22 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
         employee.setEmployeeId(UUID.randomUUID().toString());
         employee.setHireDate(Timestamp.from(Instant.now()).toString());
         employee.setEmail(Validator.setEmail(employee.getFirstname(), employee.getLastname()));
-        Address address = getRemoteAddressById(employeeDto.getAddressId()).orElseThrow(RemoteApiAddressNotLoadedException::new);
-        employee.setAddress(address);
+        setEmployeeDependency(employee,employeeDto.getAddressId());
         EmployeeAvro employeeAvro = EmployeeMapper.fromBeanToAvro(employee);
         return EmployeeMapper.fromAvroToBean(outputKafkaProducerEmployeeService.produceKafkaEventEmployeeCreate(employeeAvro));
     }
 
     @Override
     public Employee createEmployee(Employee employee) throws RemoteApiAddressNotLoadedException {
-        return outputEmployeeService.saveEmployee(employee);
+        Employee saved= outputEmployeeService.saveEmployee(employee);
+        setEmployeeDependency(saved, saved.getAddressId());
+        return saved;
     }
 
     @Override
     public Employee produceKafkaEventEmployeeDelete(String employeeId) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
         Employee employee = getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        Address address = getRemoteAddressById(employee.getAddressId()).orElseThrow(RemoteApiAddressNotLoadedException::new);
-        employee.setAddressId(address.getAddressId());
-        employee.setAddress(address);
+        setEmployeeDependency(employee,employee.getAddressId());
         EmployeeAvro employeeAvro = EmployeeMapper.fromBeanToAvro(employee);
         return EmployeeMapper.fromAvroToBean(outputKafkaProducerEmployeeService.produceKafkaEventEmployeeDelete(employeeAvro));
     }
@@ -114,16 +119,16 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
         employee.setEmail(Validator.setEmail(employeeDto.getFirstname(), employeeDto.getLastname()));
         employee.setState(employeeDto.getState());
         employee.setType(employeeDto.getType());
-        Address address = getRemoteAddressById(employeeDto.getAddressId()).orElseThrow(RemoteApiAddressNotLoadedException::new);
-        employee.setAddressId(employeeDto.getAddressId());
-        employee.setAddress(address);
+        setEmployeeDependency(employee,employeeDto.getAddressId());
         EmployeeAvro employeeAvro = EmployeeMapper.fromBeanToAvro(employee);
         return EmployeeMapper.fromAvroToBean(outputKafkaProducerEmployeeService.produceKafkaEventEmployeeEdit(employeeAvro));
     }
 
     @Override
     public Employee editEmployee(Employee payload) throws RemoteApiAddressNotLoadedException {
-        return outputEmployeeService.editEmployee(payload);
+        Employee updated = outputEmployeeService.editEmployee(payload);
+        setEmployeeDependency(updated, updated.getAddressId());
+        return updated;
     }
 
     @Override

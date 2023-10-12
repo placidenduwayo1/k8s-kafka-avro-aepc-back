@@ -106,15 +106,14 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee [" +
-                "id='" + employeeId + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", hire-date='" + hireDate + '\'' +
-                ", state='" + state + '\'' +
-                ", type='" + type + '\'' +
-                ", address-id='" + addressId + '\'' +
-                ", address=" + address +
+                "id:'" + employeeId + '\'' +
+                ", firstname:'" + firstname + '\'' +
+                ", lastname:'" + lastname + '\'' +
+                ", email:'" + email + '\'' +
+                ", hire-date:'" + hireDate + '\'' +
+                ", state:'" + state + '\'' +
+                ", type:'" + type + '\'' +
+                ", address:" + address +
                 ']';
     }
 }

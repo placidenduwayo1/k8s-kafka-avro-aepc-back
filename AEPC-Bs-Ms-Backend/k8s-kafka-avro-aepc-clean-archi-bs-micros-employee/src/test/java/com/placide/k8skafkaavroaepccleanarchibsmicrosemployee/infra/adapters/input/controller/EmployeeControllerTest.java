@@ -59,14 +59,15 @@ class EmployeeControllerTest {
         Address actual1 = underTest.getRemoteAddress(ADDRESS_ID);
         Mockito.when(inputEmployeeService.produceKafkaEventEmployeeCreate(dto)).thenReturn(bean);
         Mockito.when(inputEmployeeService.createEmployee(bean)).thenReturn(new Employee());
-        ResponseEntity<Object> actual2 = underTest.produceConsumeAndSaveEmployee(dto);
+        List<String> consumedAndSaved = underTest.produceConsumeAndSaveEmployee(dto);
         //VERIFY
         Assertions.assertAll("assertions",()->{
             Mockito.verify(remoteInputAddressService, Mockito.atLeast(1)).getRemoteAddressById(ADDRESS_ID);
             Mockito.verify(inputEmployeeService, Mockito.atLeast(1)).produceKafkaEventEmployeeCreate(dto);
             Mockito.verify(inputEmployeeService, Mockito.atLeast(1)).createEmployee(bean);
             Assertions.assertNotNull(actual1);
-            Assertions.assertNotNull(actual2);
+            Assertions.assertNotNull(consumedAndSaved);
+            Assertions.assertEquals(2,consumedAndSaved.size());
         });
     }
 
@@ -174,12 +175,13 @@ class EmployeeControllerTest {
         //EXECUTE
         Mockito.when(inputEmployeeService.produceKafkaEventEmployeeEdit(dto,EMPLOYEE_ID)).thenReturn(updated);
         Mockito.when(inputEmployeeService.editEmployee(updated)).thenReturn(new Employee());
-        ResponseEntity<Object> actual = underTest.update(EMPLOYEE_ID,dto);
+        List<String> consumedAndSaved = underTest.update(EMPLOYEE_ID,dto);
         //VERIFY
         Assertions.assertAll("assertions",()->{
             Mockito.verify(inputEmployeeService, Mockito.atLeast(1)).produceKafkaEventEmployeeEdit(dto,EMPLOYEE_ID);
             Mockito.verify(inputEmployeeService, Mockito.atLeast(1)).editEmployee(updated);
-            Assertions.assertNotNull(actual);
+            Assertions.assertNotNull(consumedAndSaved);
+            Assertions.assertEquals(2,consumedAndSaved.size());
         });
     }
 }

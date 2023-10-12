@@ -61,11 +61,11 @@ public class Company {
     @Override
     public String toString() {
         return "Company[" +
-                "id='" + companyId + '\'' +
-                ", name='" + name + '\'' +
-                ", agency='" + agency + '\'' +
-                ", type='" + type + '\'' +
-                ", connected-date=" + connectedDate +
+                "id:'" + companyId + '\'' +
+                ", name:'" + name + '\'' +
+                ", agency:'" + agency + '\'' +
+                ", type:'" + type + '\'' +
+                ", connected-date:" + connectedDate +
                 ']';
     }
 }

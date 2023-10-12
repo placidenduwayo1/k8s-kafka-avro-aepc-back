@@ -60,7 +60,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
         }
     }
 
-    private void setProjectDependencies(Project project, String employeeId, String companyId) throws RemoteEmployeeApiException, RemoteCompanyApiException {
+    private void setProjectDependencies(Project project, String employeeId, String companyId) throws RemoteEmployeeApiException,
+            RemoteCompanyApiException {
         Employee employee = getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
         project.setEmployeeId(employeeId);
         project.setEmployee(employee);
@@ -82,17 +83,16 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
         Project project = Mapper.fromTo(projectDto);
         project.setProjectId(UUID.randomUUID().toString());
         project.setCreatedDate(Timestamp.from(Instant.now()).toString());
-        Employee employee = getRemoteEmployeeAPI(projectDto.getEmployeeId()).orElseThrow(RemoteEmployeeApiException::new);
-        Company company = getRemoteApiCompany(projectDto.getCompanyId()).orElseThrow(RemoteCompanyApiException::new);
-        project.setEmployee(employee);
-        project.setCompany(company);
+        setProjectDependencies(project,projectDto.getEmployeeId(), projectDto.getCompanyId());
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
         return Mapper.fromAvroToBean(kafkaProducerService.produceKafkaEventProjectCreate(projectAvro));
     }
 
     @Override
-    public Project createProject(Project project) {
-        return outputProjectService.saveProject(project);
+    public Project createProject(Project project) throws RemoteCompanyApiException, RemoteEmployeeApiException {
+        Project saved= outputProjectService.saveProject(project);
+        setProjectDependencies(saved, saved.getEmployeeId(), saved.getCompanyId());
+        return saved;
     }
 
     @Override
@@ -106,7 +106,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     }
 
     @Override
-    public Project produceKafkaEventProjectDelete(String projectId) throws ProjectNotFoundException, RemoteEmployeeApiException, RemoteCompanyApiException {
+    public Project produceKafkaEventProjectDelete(String projectId) throws ProjectNotFoundException, RemoteEmployeeApiException,
+            RemoteCompanyApiException {
         Project project = getProject(projectId).orElseThrow(ProjectNotFoundException::new);
         setProjectDependencies(project, project.getEmployeeId(), project.getCompanyId());
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
@@ -140,8 +141,11 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     }
 
     @Override
-    public Project updateProject(Project payload) {
-        return outputProjectService.updateProject(payload);
+    public Project updateProject(Project payload) throws RemoteCompanyApiException, RemoteEmployeeApiException {
+        setProjectDependencies(payload,payload.getEmployeeId(), payload.getCompanyId());
+        Project updated = outputProjectService.updateProject(payload);
+        setProjectDependencies(updated, updated.getEmployeeId(), updated.getCompanyId());
+        return updated;
     }
 
     @Override
