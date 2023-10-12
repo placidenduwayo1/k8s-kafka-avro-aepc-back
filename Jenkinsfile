@@ -23,9 +23,6 @@ pipeline {
                 dir('Utility-Services/microservices-config-service/'){
                     sh 'mvn clean install' 
                 }
-                dir('Utility-Services/microservices-registry-service/'){
-                    sh 'mvn clean install' 
-                }
                 dir('Utility-Services/gateway-service/'){
                     sh 'mvn clean install' 
                 }
@@ -45,9 +42,6 @@ pipeline {
                         archiveArtifacts '**/target/*.jar'
                     }
                     dir('Utility-Services/microservices-config-service/'){
-                        archiveArtifacts '**/target/*.jar'
-                    }
-                    dir('Utility-Services/microservices-registry-service/'){
                         archiveArtifacts '**/target/*.jar'
                     }
                     dir('Utility-Services/gateway-service/'){
