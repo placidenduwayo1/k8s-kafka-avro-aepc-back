@@ -83,7 +83,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
   ### kafka infra summary
 ![kafka-infrastructure](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/4cb3738e-718a-466c-9b59-41d4773a1a0b)
 
-- schema registry (docker image) defines a schema for all events published into kafka topics
+- a schema registry (docker image) defines a schema for all events published into kafka topics
 - avro uses the defined and registered schema to serialize avents before publishing them into topics
 
 # general architecture of the project
