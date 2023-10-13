@@ -94,6 +94,6 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 - For instance, if the client wants to get all registrated addresses (k8s-kafka-avro-aepc-bs-ms-address pod): 
   - ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
 
-here, k8s-kafka-avro-aepc-bs-ms-address service exposes the pod k8s-kafka-avro-aepc-bs-ms-address that have de same name as its service
+here, **k8s-kafka-avro-aepc-bs-ms-address** service exposes the pod k8s-kafka-avro-aepc-bs-ms-address that have de same name as its service
 
 
