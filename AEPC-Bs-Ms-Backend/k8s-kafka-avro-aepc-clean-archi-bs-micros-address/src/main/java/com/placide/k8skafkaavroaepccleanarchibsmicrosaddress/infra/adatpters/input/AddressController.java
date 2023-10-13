@@ -8,6 +8,7 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.domain.exceptions.A
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.domain.ports.input.InputAddressService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosaddress.infra.adatpters.output.models.AddressDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,12 @@ import java.util.List;
 public class AddressController {
 
     private final InputAddressService inputAddressService;
-
+    @Value("${personal.welcome.message}")
+    private String welcome;
+    @GetMapping(value = "")
+    public ResponseEntity<Object> getWelcome(){
+        return new ResponseEntity<>(welcome, HttpStatus.OK);
+    }
     @PostMapping(value = "/addresses")
     public List<String> produceAndConsumeAddress(@RequestBody AddressDto addressDto) throws
             AddressAlreadyExistsException, AddressFieldsInvalidException {
