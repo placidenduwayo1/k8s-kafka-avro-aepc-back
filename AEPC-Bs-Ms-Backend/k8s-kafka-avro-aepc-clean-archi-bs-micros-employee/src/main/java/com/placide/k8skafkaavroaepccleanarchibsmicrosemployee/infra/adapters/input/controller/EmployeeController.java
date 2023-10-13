@@ -6,6 +6,8 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.exceptions.
 import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.ports.input.InputEmployeeService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.ports.input.RemoteInputAddressService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.infra.adapters.output.models.EmployeeDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class EmployeeController {
     private final InputEmployeeService inputEmployeeService;
     private final RemoteInputAddressService remoteInputAddressService;
-
-    public EmployeeController(InputEmployeeService inputEmployeeService, RemoteInputAddressService remoteInputAddressService) {
-        this.inputEmployeeService = inputEmployeeService;
-        this.remoteInputAddressService = remoteInputAddressService;
+    @Value("${personal.welcome.message}")
+    private String welcome;
+    @GetMapping(value = "")
+    public ResponseEntity<Object> getWelcome(){
+        return new ResponseEntity<>(welcome, HttpStatus.OK);
     }
 
     @PostMapping(value = "/employees")

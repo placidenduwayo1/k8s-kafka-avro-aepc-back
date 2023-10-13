@@ -8,6 +8,8 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.InputRemoteApiCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.InputRemoteApiEmployeeService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.output.models.ProjectDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class ProjectController {
     private final InputProjectService inputProjectService;
     private final InputRemoteApiEmployeeService inputRemoteApiEmployeeService;
     private final InputRemoteApiCompanyService inputRemoteApiCompanyService;
-
-    public ProjectController(InputProjectService inputProjectService, InputRemoteApiEmployeeService inputRemoteApiEmployeeService,
-                             InputRemoteApiCompanyService inputRemoteApiCompanyService) {
-        this.inputProjectService = inputProjectService;
-        this.inputRemoteApiEmployeeService = inputRemoteApiEmployeeService;
-        this.inputRemoteApiCompanyService = inputRemoteApiCompanyService;
+    @Value("${personal.welcome.message}")
+    private String welcome;
+    @GetMapping(value = "")
+    public ResponseEntity<Object> getWelcome(){
+        return new ResponseEntity<>(welcome, HttpStatus.OK);
     }
-
     @PostMapping(value = "/projects")
     public List<String> produceConsumeAndSave(@RequestBody ProjectDto dto) throws RemoteCompanyApiException,
             ProjectPriorityInvalidException, ProjectAlreadyExistsException, RemoteEmployeeApiException, ProjectStateInvalidException,

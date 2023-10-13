@@ -7,6 +7,8 @@ import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.C
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyTypeInvalidException;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +17,15 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class CompanyController {
     private final InputCompanyService companyService;
+    @Value("${personal.welcome.message}")
+    private String welcome;
 
-    public CompanyController(InputCompanyService companyService) {
-        this.companyService = companyService;
+    @GetMapping(value = "")
+    public ResponseEntity<Object> getWelcome(){
+        return new ResponseEntity<>(welcome, HttpStatus.OK);
     }
 
     @PostMapping(value = "/companies")
