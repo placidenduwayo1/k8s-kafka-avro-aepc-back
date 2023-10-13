@@ -87,11 +87,13 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 - avro uses the defined and registered schema to serialize avents before publishing them into topics
 
 # general architecture of the project
+![k8s-kafka-avro-aepc-clean-archi](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/f4fbdcc2-100c-4c3e-9762-3c3688a8659b)
 
-To access to backend business microservices, the client goas through a gateway service and indicates the name of service that exposes the pod he wants to consume such as: 
-```http://gateway-ip-address:k8s-generated-port/service-name-exposing-pod/endpoint```
+- To access to backend business microservices, the client goes through a gateway-service pod (the gateway-service pod is exposed by the service with same name) and indicates the name of service that exposes the pod he wants to consume as following: 
+```http://gateway-ip:k8s-generated-port/service-name-exposing-pod/endpoint```
+- For instance, if the client wants to get all registrated addresses (k8s-kafka-avro-aepc-bs-ms-address pod): 
+```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
+  - here, k8s-kafka-avro-aepc-bs-ms-address service exposes the pod k8s-kafka-avro-aepc-bs-ms-address that have de same name as its service
 
-For instance, if he wants to get all registrated addresses (k8s-kafka-avro-aepc-bs-ms-address pod): 
-```http://192.168.49.2:31688/:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
 
 
