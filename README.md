@@ -135,27 +135,27 @@ list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-company pod:
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company```
   - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies```
       
-      ***payload ***:
-      ```
-      {
-        name: string value
-        agency: int value
-        type: string value
-      }
-      ```
+    ***payload ***:
+    ```
+    {
+      name: string value
+      agency: int value
+      type: string value
+    }
+    ```
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies```
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/addresses/id/{value of company id}```
     - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies/{value of company id}```
     - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies/{value of company id}```
       
-       ***payload ***:
-      ```
-      {
-        name: string value
-        agency: int value
-        type: string value
-      }
-      ```
+  ***payload ***:
+  ```
+  {
+    name: string value
+    agency: int value
+    type: string value
+  }
+  ```
 
 # employee microservice pod
 
@@ -163,34 +163,34 @@ list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-employee pod:
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee```
   - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees```
       
-      ***payload***:
-      ```
-      {
-        firstname: string value
-        lastname: string value
-        state: string value
-        type: string value
-        address-id: string value
-      }
-      ```
-    - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees```
-    - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
-    - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
-    - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
+  ***payload***:
+  ```
+  {
+    firstname: string value
+    lastname: string value
+    state: string value
+    type: string value
+    address-id: string value
+  }
+  ```
+  - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees```
+  - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
+  - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
+  - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/{value of employee id}```
       
-      ***payload:***
-      ```
-      {
-        firstname: string value
-        lastname: string value
-        state: string value
-        type: string value
-        address-id: string value
-      }
-      ```
-    - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/addresses/{value of address id}```: employees living at given address
+  ***payload:***
+  ```
+  {
+    firstname: string value
+    lastname: string value
+    state: string value
+    type: string value
+    address-id: string value
+  }
+  ```
+  - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-employee/employees/addresses/{value of address id}```: employees living at given address
 
- for [POST] and [PUT], ***address-id***, employee ms sends request to address ms to ask address related to address-id. a resilience is managed if address ms is down
+for [POST] and [PUT], ***address-id***, employee ms sends request to address ms to ask address related to address-id. a resilience is managed if address ms is down
 
 # project microservice pod
 
@@ -198,33 +198,33 @@ list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-project pod:
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project```
   - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects```
       
-    ***payload:***
-    ```
-    {
-      name: string value
-      description: string value
-      priority: string value
-      state: string value
-      employee-id: string value
-      company-id: string value
-    }
-    ```
+  ***payload:***
+  ```
+  {
+    name: string value
+    description: string value
+    priority: string value
+    state: string value
+    employee-id: string value
+    company-id: string value
+  }
+  ```
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects```
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects/{value of project id}```
   - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects/{value of project id}```
   - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects/{value of project id}```
     
-   ***payload:***
-    ```
-    {
-      name: string value
-      description: string value
-      priority: string value
-      state: string value
-      employee-id: string value
-      company-id: string value
-    }
-    ```
+  ***payload:***
+  ```
+  {
+    name: string value
+    description: string value
+    priority: string value
+    state: string value
+    employee-id: string value
+    company-id: string value
+  }
+  ```
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects/employees/{value of employee id}```: projects assigned at given employee
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-project/projects/companies/{value of company id}```: projects assigned at given company
 
