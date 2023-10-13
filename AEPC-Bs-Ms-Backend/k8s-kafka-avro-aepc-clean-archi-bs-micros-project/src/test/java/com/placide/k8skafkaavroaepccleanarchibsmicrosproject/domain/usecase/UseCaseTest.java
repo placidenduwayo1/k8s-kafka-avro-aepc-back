@@ -99,10 +99,14 @@ class UseCaseTest {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
         Mockito.when(outputProjectService.saveProject(Mockito.any(Project.class))).thenReturn(bean);
         Project saved = underTest.createProject(bean);
         //VERIFY
         Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID);
             Mockito.verify(outputProjectService, Mockito.atLeast(1)).saveProject(bean);
             Assertions.assertEquals(bean, saved);
         });
@@ -221,61 +225,76 @@ class UseCaseTest {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE
-        Mockito.when(outputProjectService.updateProject(bean)).thenReturn(new Project());
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputProjectService.updateProject(bean)).thenReturn(bean);
         Project updated = underTest.updateProject(bean);
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1)).updateProject(bean),
-                () -> Assertions.assertNotNull(updated),
-                () -> Assertions.assertNotEquals(projectDto.getDescription(), updated.getDescription()));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(outputRemoteAPIEmployeeService,Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID);
+            Mockito.verify(outputProjectService, Mockito.atLeast(1)).updateProject(bean);
+            Assertions.assertNotNull(updated);
+        });
     }
 
     @Test
-    void loadProjectsAssignedToEmployee() throws RemoteEmployeeApiException {
+    void loadProjectsAssignedToEmployee() throws RemoteEmployeeApiException, RemoteCompanyApiException {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
         Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
         Employee obtained = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID).orElseThrow(RemoteEmployeeApiException::new);
         Mockito.when(outputProjectService.loadProjectsAssignedToEmployee(EMPLOYEE_ID)).thenReturn(beans);
         List<Project> projects = underTest.loadProjectsAssignedToEmployee(EMPLOYEE_ID);
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID),
-                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1)).loadProjectsAssignedToEmployee(EMPLOYEE_ID),
-                () -> Assertions.assertEquals(beans.get(0), projects.get(0)),
-                () -> Assertions.assertEquals(beans.size(), projects.size()),
-                () -> Assertions.assertEquals(employee, obtained));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID);
+            Mockito.verify(outputProjectService, Mockito.atLeast(1)).loadProjectsAssignedToEmployee(EMPLOYEE_ID);
+            Assertions.assertEquals(beans.get(0), projects.get(0));
+            Assertions.assertEquals(beans.size(), projects.size());
+            Assertions.assertEquals(employee, obtained);
+        });
     }
 
     @Test
-    void loadProjectsOfCompanyC() throws RemoteCompanyApiException {
+    void loadProjectsOfCompanyC() throws RemoteCompanyApiException, RemoteEmployeeApiException {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
         Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
         Company actual = underTest.getRemoteApiCompany(COMPANY_ID).orElseThrow(RemoteCompanyApiException::new);
         Mockito.when(outputProjectService.loadProjectsOfCompanyC(actual.getCompanyId())).thenReturn(beans);
         List<Project> actuals = underTest.loadProjectsOfCompanyC(COMPANY_ID);
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID),
-                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1)).loadProjectsOfCompanyC(actual.getCompanyId()),
-                () -> Assertions.assertEquals(company, actual),
-                () -> Assertions.assertFalse(actuals.isEmpty()));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID);
+            Mockito.verify(outputProjectService, Mockito.atLeast(1)).loadProjectsOfCompanyC(actual.getCompanyId());
+            Assertions.assertEquals(company, actual);
+            Assertions.assertFalse(actuals.isEmpty());
+        });
     }
 
     @Test
-    void getAllProjects() {
+    void getAllProjects() throws RemoteEmployeeApiException, RemoteCompanyApiException {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
         Mockito.when(outputProjectService.getAllProjects()).thenReturn(beans);
         List<Project> actuals = underTest.getAllProjects();
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputProjectService, Mockito.atLeast(1)).getAllProjects(),
-                () -> Assertions.assertEquals(beans.size(), actuals.size()));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(outputProjectService, Mockito.atLeast(1)).getAllProjects();
+            Assertions.assertEquals(beans.size(), actuals.size());
+            Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
+            Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID);
+        });
     }
 
     @Test

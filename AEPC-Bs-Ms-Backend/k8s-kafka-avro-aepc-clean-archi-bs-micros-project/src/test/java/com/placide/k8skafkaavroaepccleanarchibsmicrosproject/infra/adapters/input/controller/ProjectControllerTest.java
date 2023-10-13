@@ -69,8 +69,6 @@ class ProjectControllerTest {
 
         //VERIFY
         Assertions.assertAll("assertions", () -> {
-            Mockito.verify(inputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteApiCompany(COMPANY_ID);
-            Mockito.verify(inputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).produceKafkaEventProjectCreate(dto);
             Mockito.verify(inputProjectService, Mockito.atLeast(1)).createProject(bean);
             Assertions.assertNotNull(consumedAndSaved);
