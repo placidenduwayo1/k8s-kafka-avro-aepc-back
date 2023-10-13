@@ -100,14 +100,14 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 
   list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-address pod:
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address```
-    - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
-      ```payload {
+    - [POST] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses: payload{
         num:int value
         street: string value
         poBox: int value
         city: string value
         coutry: string value
       }```
+      
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses/id/{value of address id}```
     - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses/id/{value of address id}```
@@ -119,6 +119,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
         city: string value
         coutry: string value
       }```
+
 # company microservice pod
 
   list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-company pod:
