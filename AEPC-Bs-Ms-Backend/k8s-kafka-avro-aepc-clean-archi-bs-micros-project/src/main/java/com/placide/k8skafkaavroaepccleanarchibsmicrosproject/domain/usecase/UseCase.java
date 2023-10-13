@@ -20,12 +20,14 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class UseCase implements InputProjectService, InputRemoteApiEmployeeService, InputRemoteApiCompanyService {
     private final OutputKafkaProducerProjectService kafkaProducerService;
     private final OutputProjectService outputProjectService;
     private final OutputRemoteApiEmployeeService outputEmployeeAPIService;
     private final OutputRemoteApiCompanyService outputCompanyAPIService;
+    private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
     public UseCase(OutputKafkaProducerProjectService kafkaProducerService, OutputProjectService outputProjectService, OutputRemoteApiEmployeeService outputEmployeeAPIService, OutputRemoteApiCompanyService outputCompanyAPIService) {
         this.kafkaProducerService = kafkaProducerService;
@@ -151,18 +153,44 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     @Override
     public List<Project> loadProjectsAssignedToEmployee(String employeeId) throws RemoteEmployeeApiException {
         Employee employee = getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
-        return outputProjectService.loadProjectsAssignedToEmployee(employee.getEmployeeId());
+        List<Project> projects = outputProjectService.loadProjectsAssignedToEmployee(employee.getEmployeeId());
+        projects.forEach(project -> {
+            try {
+                setProjectDependencies(project, project.getEmployeeId(), project.getCompanyId());
+            } catch (RemoteEmployeeApiException | RemoteCompanyApiException e) {
+                logger.info(String.format(e.getMessage()));
+            }
+        });
+
+        return projects;
     }
 
     @Override
     public List<Project> loadProjectsOfCompanyC(String companyId) throws RemoteCompanyApiException {
         Company company = getRemoteApiCompany(companyId).orElseThrow(RemoteCompanyApiException::new);
-        return outputProjectService.loadProjectsOfCompanyC(company.getCompanyId());
+        List<Project> projects=  outputProjectService.loadProjectsOfCompanyC(company.getCompanyId());
+        projects.forEach(project -> {
+            try {
+                setProjectDependencies(project, project.getEmployeeId(), project.getCompanyId());
+            } catch (RemoteEmployeeApiException | RemoteCompanyApiException e) {
+                logger.info(String.format(e.getMessage()));
+            }
+        });
+        return projects;
     }
 
     @Override
     public List<Project> getAllProjects() {
-        return outputProjectService.getAllProjects();
+        List<Project> projects = outputProjectService.getAllProjects();
+        projects.forEach(project -> {
+            try {
+                setProjectDependencies(project, project.getEmployeeId(), project.getCompanyId());
+            } catch (RemoteEmployeeApiException | RemoteCompanyApiException e) {
+                logger.info(String.format(e.getMessage()));
+            }
+        });
+
+        return projects;
     }
 
     @Override

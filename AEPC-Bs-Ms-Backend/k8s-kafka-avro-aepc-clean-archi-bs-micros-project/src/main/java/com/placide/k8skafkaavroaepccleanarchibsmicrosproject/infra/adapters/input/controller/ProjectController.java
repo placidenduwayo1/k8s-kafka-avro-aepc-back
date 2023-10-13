@@ -1,12 +1,8 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.controller;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.company.Company;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.employee.Employee;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.project.Project;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.*;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.InputProjectService;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.InputRemoteApiCompanyService;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.input.InputRemoteApiEmployeeService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.output.models.ProjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final InputProjectService inputProjectService;
-    private final InputRemoteApiEmployeeService inputRemoteApiEmployeeService;
-    private final InputRemoteApiCompanyService inputRemoteApiCompanyService;
     @Value("${personal.welcome.message}")
     private String welcome;
     @GetMapping(value = "")
@@ -38,7 +32,7 @@ public class ProjectController {
     }
     @GetMapping(value = "/projects")
     public List<Project> getAllProjects(){
-        return setProjectDependency(inputProjectService.getAllProjects());
+        return inputProjectService.getAllProjects();
     }
     @GetMapping(value = "/projects/{id}")
     public Project getProject(@PathVariable(name = "id") String id) throws ProjectNotFoundException {
@@ -46,13 +40,11 @@ public class ProjectController {
     }
     @GetMapping(value = "/projects/employees/{employeeId}")
     public List<Project> getProjectsByEmployee(@PathVariable(name = "employeeId") String employeeId) throws RemoteEmployeeApiException {
-        List<Project> projects = inputProjectService.loadProjectsAssignedToEmployee(employeeId);
-        return setProjectDependency(projects);
+        return inputProjectService.loadProjectsAssignedToEmployee(employeeId);
     }
     @GetMapping(value = "/projects/companies/{companyId}")
     public List<Project> getProjectsByCompany(@PathVariable(name = "companyId") String companyId) throws RemoteCompanyApiException {
-        List<Project> projects = inputProjectService.loadProjectsOfCompanyC(companyId);
-        return setProjectDependency(projects);
+        return inputProjectService.loadProjectsOfCompanyC(companyId);
     }
     @DeleteMapping(value = "/projects/{id}")
     public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) throws ProjectNotFoundException,
@@ -70,20 +62,5 @@ public class ProjectController {
         Project consumed = inputProjectService.produceKafkaEventProjectUpdate(dto, id);
         Project saved = inputProjectService.updateProject(consumed);
         return List.of("consumed: "+consumed,"saved: "+saved);
-    }
-    private List<Project> setProjectDependency(List<Project> projects){
-        projects.forEach((var project)->{
-            try {
-                Employee remoteEmployee = inputRemoteApiEmployeeService.getRemoteEmployeeAPI(project.getEmployeeId())
-                        .orElseThrow(RemoteEmployeeApiException::new);
-                Company remoteCompany = inputRemoteApiCompanyService.getRemoteApiCompany(project.getCompanyId())
-                        .orElseThrow(RemoteCompanyApiException::new);
-                project.setEmployee(remoteEmployee);
-                project.setCompany(remoteCompany);
-            } catch (RemoteEmployeeApiException | RemoteCompanyApiException e) {
-                e.getMessage();
-            }
-        });
-        return projects;
     }
 }
