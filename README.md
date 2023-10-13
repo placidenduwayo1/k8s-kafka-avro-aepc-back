@@ -102,7 +102,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address```
     - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
        
-      payload:
+      ***payload***:
       ```
       {
         num:int value
@@ -117,13 +117,16 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses/id/{value of address id}```
     - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses/id/{value of address id}```
     - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses/id/{value of address id}```
-      ```payload {
+      ***payload***:
+      ```
+      {
         num:int value
         street: string value
         poBox: int value
         city: string value
         coutry: string value
-      }```
+      }
+      `````
 
 # company microservice pod
 
