@@ -175,6 +175,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8181:8181"
+    depends_on:
+      microservices-config-service:
+        condition: service_healthy
     networks:
       - kafka-network
 
