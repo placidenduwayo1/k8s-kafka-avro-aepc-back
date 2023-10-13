@@ -88,7 +88,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 
 # general architecture of the project
 
-To access to backend business microservices, the client goas through a gateway service and indicates the name of service that exposes the pod he wants to consume such as: 
+To access to backend business microservices, the client goas through a gateway service and indicates the name of service that exposes the pod he wants to consume as: 
 
 ```http://gateway-ip-address:k8s-generated-port/service-name-exposing-pod/endpoint```
 
