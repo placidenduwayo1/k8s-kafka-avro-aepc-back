@@ -86,4 +86,12 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 - a schema registry (docker image) defines a schema for all events published into kafka topics
 - avro uses the defined and registered schema to serialize avents before publishing them into topics
 
+# general architecture of the project
+
+To access to backend business microservices, the client goas through a gateway service and indicates the name of service that exposes the pod he wants to consume such as: 
+```http://gateway-ip-address:k8s-generated-port/service-name-exposing-pod/endpoint```
+
+For instance, if he wants to get all registrated addresses (k8s-kafka-avro-aepc-bs-ms-address pod): 
+```http://192.168.49.2:31688/:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
+
 

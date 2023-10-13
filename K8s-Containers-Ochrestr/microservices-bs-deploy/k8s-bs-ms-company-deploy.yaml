@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-kafka-avro-aepc-bs-ms-company
+  labels:
+    app: k8s-kafka-avro-aepc-bs-ms-company
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-kafka-avro-aepc-bs-ms-company
+  template:
+    metadata:
+      name: k8s-kafka-avro-aepc-bs-ms-company
+      labels:
+        app: k8s-kafka-avro-aepc-bs-ms-company
+    spec:
+      containers:
+        - name: k8s-kafka-avro-aepc-bs-ms-company
+          image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-company
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8583
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-kafka-avro-aepc-bs-ms-company
+  labels:
+    app: k8s-kafka-avro-aepc-bs-ms-company
+spec:
+  selector:
+    app: k8s-kafka-avro-aepc-bs-ms-company
+  ports:
+    - protocol: TCP
+      port: 8583
+      targetPort: 8583
+      name: 8583-8583
+  type: LoadBalancer
