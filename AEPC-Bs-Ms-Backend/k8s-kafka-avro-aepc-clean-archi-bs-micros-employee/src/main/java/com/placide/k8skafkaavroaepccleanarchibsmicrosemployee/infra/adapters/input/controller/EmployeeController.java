@@ -48,16 +48,14 @@ public class EmployeeController {
     @GetMapping(value = "/employees/addresses/{addressId}")
     public List<Employee> loadEmployeesOnGivenAddress(@PathVariable(name = "addressId") String addressId) throws
             RemoteApiAddressNotLoadedException {
-        List<Employee> employees = inputEmployeeService.loadEmployeesByRemoteAddress(addressId);
-        return setAddressToEmployee(employees);
+        return inputEmployeeService.loadEmployeesByRemoteAddress(addressId);
     }
     @GetMapping(value = "/employees")
     public List<Employee> loadAllEmployees(){
-        List<Employee> employees = inputEmployeeService.loadAllEmployees();
-        return setAddressToEmployee(employees);
+        return inputEmployeeService.loadAllEmployees();
     }
     @GetMapping(value = "/employees/{id}")
-    public Employee getEmployee(@PathVariable(name = "id") String id) throws EmployeeNotFoundException {
+    public Employee getEmployee(@PathVariable(name = "id") String id) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
         return inputEmployeeService.getEmployeeById(id).orElseThrow(EmployeeNotFoundException::new);
     }
     @DeleteMapping(value = "/employees/{id}")
@@ -75,16 +73,5 @@ public class EmployeeController {
         Employee saved = inputEmployeeService.editEmployee(consumed);
         return List.of("produced consumed:"+consumed,"saved:"+saved);
     }
-    private List<Employee> setAddressToEmployee(List<Employee> employees){
-        employees.forEach((var employee)->{
-            try {
-                Address address = remoteInputAddressService.getRemoteAddressById(employee.getAddressId())
-                        .orElseThrow(RemoteApiAddressNotLoadedException::new);
-                employee.setAddress(address);
-            } catch (RemoteApiAddressNotLoadedException e) {
-              e.getMessage();
-            }
-        });
-        return employees;
-    }
+
 }

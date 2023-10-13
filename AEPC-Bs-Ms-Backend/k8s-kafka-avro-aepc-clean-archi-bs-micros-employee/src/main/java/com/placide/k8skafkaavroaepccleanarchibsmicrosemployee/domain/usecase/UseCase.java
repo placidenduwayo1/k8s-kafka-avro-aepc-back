@@ -138,9 +138,11 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(String employeeId) throws EmployeeNotFoundException {
-        return Optional.of(outputEmployeeService.getEmployeeById(employeeId)).orElseThrow(
+    public Optional<Employee> getEmployeeById(String employeeId) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
+       Employee employee = outputEmployeeService.getEmployeeById(employeeId).orElseThrow(
                 EmployeeNotFoundException::new);
+       setEmployeeDependency(employee, employee.getAddressId());
+       return Optional.of(employee);
     }
 
     @Override
@@ -150,7 +152,15 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
 
     @Override
     public List<Employee> loadAllEmployees() {
-        return outputEmployeeService.loadAllEmployees();
+        List<Employee> employees = outputEmployeeService.loadAllEmployees();
+        employees.forEach(employee -> {
+            try {
+                setEmployeeDependency(employee, employee.getAddressId());
+            } catch (RemoteApiAddressNotLoadedException e) {
+                e.getMessage();
+            }
+        });
+        return employees;
     }
 
     @Override

@@ -92,14 +92,17 @@ class UseCaseTest {
     void createEmployee() throws RemoteApiAddressNotLoadedException {
         //PREPARE
         //EXECUTE
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(employeeServiceMock.saveEmployee(bean)).thenReturn(bean);
         Employee actual = underTest.createEmployee(bean);
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).saveEmployee(bean),
-                () -> Assertions.assertNotNull(actual),
-                () -> Assertions.assertEquals(bean, actual),
-                () -> Assertions.assertNotNull(actual.getAddress()));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(addressProxyMock, Mockito.atLeast(1)).getRemoteAddressById(ADDRESS_ID);
+            Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).saveEmployee(bean);
+            Assertions.assertNotNull(actual);
+            Assertions.assertEquals(bean, actual);
+            Assertions.assertNotNull(actual.getAddress());
+        });
     }
 
     @Test
@@ -107,9 +110,9 @@ class UseCaseTest {
         //PREPARE
         String employeeId = "uuid";
         //EXECUTE
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(employeeServiceMock.getEmployeeById(employeeId)).thenReturn(Optional.of(bean));
         Employee actual = underTest.getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(kafkaProducerMock.produceKafkaEventEmployeeDelete(avro)).thenReturn(avro);
         Employee produced = underTest.produceKafkaEventEmployeeDelete(employeeId);
         //VERIFY
@@ -129,16 +132,19 @@ class UseCaseTest {
         //PREPARE
         String id = "uuid";
         //EXECUTE
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(employeeServiceMock.getEmployeeById(id)).thenReturn(Optional.of(bean));
         Employee employee = underTest.getEmployeeById(id).orElseThrow(EmployeeNotFoundException::new);
         Mockito.when(employeeServiceMock.deleteEmployee(employee.getEmployeeId())).thenReturn("");
         String msg = underTest.deleteEmployee(id);
         //VERIFY
-        Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).deleteEmployee(employee.getEmployeeId()),
-                () -> Assertions.assertNotNull(employee),
-                () -> Assertions.assertEquals("Employee" + employee + "successfully deleted", msg),
-                () -> Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).getEmployeeById(id));
+        Assertions.assertAll("gpe of assertions",()->{
+            Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).deleteEmployee(employee.getEmployeeId());
+            Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).getEmployeeById(id);
+            Assertions.assertNotNull(employee);
+            Assertions.assertEquals("Employee" + employee + "successfully deleted", msg);
+            Mockito.verify(addressProxyMock, Mockito.atLeast(1)).getRemoteAddressById(ADDRESS_ID);
+        });
     }
 
     @Test
@@ -170,6 +176,7 @@ class UseCaseTest {
         Employee updated = bean;
         updated.setAddress(new Address("address-Paris",44,"Rue Notre Dame des Victoires",74002,"Paris","France"));
         //EXECUTE
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
         Mockito.when(employeeServiceMock.editEmployee(bean)).thenReturn(updated);
         Employee actual = underTest.editEmployee(bean);
         //VERIFY
@@ -177,6 +184,7 @@ class UseCaseTest {
             Mockito.verify(employeeServiceMock, Mockito.atLeast(1)).editEmployee(bean);
             Assertions.assertNotNull(actual);
             Assertions.assertEquals(updated, actual);
+            Mockito.verify(addressProxyMock, Mockito.atLeast(1)).getRemoteAddressById(ADDRESS_ID);
         });
     }
     @Test

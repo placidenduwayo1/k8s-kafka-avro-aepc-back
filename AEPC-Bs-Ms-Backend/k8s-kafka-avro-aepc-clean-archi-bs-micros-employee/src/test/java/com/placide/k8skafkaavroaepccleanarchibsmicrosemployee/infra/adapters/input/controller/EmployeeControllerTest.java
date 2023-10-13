@@ -137,7 +137,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void getEmployee() throws EmployeeNotFoundException {
+    void getEmployee() throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException {
         //PREPARE
         //EXECUTE
         Mockito.when(inputEmployeeService.getEmployeeById(EMPLOYEE_ID)).thenReturn(Optional.of(bean));

@@ -15,7 +15,7 @@ public interface InputEmployeeService {
             EmployeeAlreadyExistsException, EmployeeEmptyFieldsException,
             EmployeeTypeInvalidException, EmployeeStateInvalidException,
             RemoteApiAddressNotLoadedException;
-    Optional<Employee> getEmployeeById(String employeeId) throws EmployeeNotFoundException;
+    Optional<Employee> getEmployeeById(String employeeId) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException;
     List<Employee> loadEmployeeByInfo(String firstname, String lastname, String state, String type, String addressId);
     List<Employee> loadAllEmployees();
     Employee produceKafkaEventEmployeeDelete(String employeeId) throws EmployeeNotFoundException, RemoteApiAddressNotLoadedException;

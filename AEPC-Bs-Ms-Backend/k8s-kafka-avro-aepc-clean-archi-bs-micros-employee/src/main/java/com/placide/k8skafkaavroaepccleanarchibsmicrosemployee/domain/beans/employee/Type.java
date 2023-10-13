@@ -7,8 +7,9 @@ public enum Type {
     TECH("tech-manager"),
     COM("com-manager"),
     EMPL("employee"),
-    TAM("talent-acquires-manager"),
-    SE("software-engineer");
+    TAR("talent-acquisition-referent"),
+    SE("software-engineer"),
+    BS("business-manager");
     private final String employeeType;
 
     Type(String employeeType) {
