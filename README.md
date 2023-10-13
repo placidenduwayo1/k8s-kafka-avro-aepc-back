@@ -135,20 +135,20 @@ list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-company pod:
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company```
   - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies```
       
-    ***payload ***:
-    ```
-    {
-      name: string value
-      agency: int value
-      type: string value
-    }
-    ```
+      ***payload***:
+      ```
+      {
+        name: string value
+        agency: int value
+        type: string value
+      }
+      ```
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies```
   - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/addresses/id/{value of company id}```
   - [DELETE] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies/{value of company id}```
   - [PUT] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-company/companies/{value of company id}```
       
-    ***payload ***:
+    ***payload***:
     ```
     {
       name: string value
