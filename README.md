@@ -101,8 +101,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
   list of **endpoints** exposed by k8s-kafka-avro-aepc-bs-ms-address pod:
     - [GET] ```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address```
     - [POST]```http://192.168.49.2:31688/k8s-kafka-avro-aepc-bs-ms-address/addresses```
-        ```payload {
-        num:int value
+        ```payload { num:int value
         street: string value
         poBox: int value
         city: string value
