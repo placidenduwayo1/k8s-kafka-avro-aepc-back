@@ -1,10 +1,9 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.services;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean.CompanyAvro;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.bean.Company;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper.CompanyMapper;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyDto;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.repository.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +39,7 @@ class OutputKafkaProducerServiceImplTest {
     private static final String [] TOPICS ={"avro-companies-created", "avro-companies-deleted", "avro-companies-edited"};
     private Company company;
     private CompanyAvro companyAvro;
+    private static final String ADDRESS_ID = "address_id";
 
     @BeforeEach
     void setUp() {
@@ -49,15 +49,13 @@ class OutputKafkaProducerServiceImplTest {
         log.info("list of kafka container brokers: {}", bootstrapServers);
         System.setProperty("kafka.bootstrapAddress", bootstrapServers);
 
+        Address address = new Address(ADDRESS_ID, 2, "Allée de la Haye du Temple", 59160,
+                "Lomme", "France");
+
         company = new Company(
-                UUID.randomUUID().toString(), "company-name", "lille", "esn", Timestamp.from(Instant.now()).toString());
-        companyAvro = CompanyAvro.newBuilder()
-                .setCompanyId(company.getCompanyId())
-                .setName(company.getName())
-                .setAgency(company.getAgency())
-                .setType(company.getType())
-                .setConnectedDate(company.getConnectedDate())
-                .build();
+                UUID.randomUUID().toString(), "company-name", "Lomme", "esn",
+                Timestamp.from(Instant.now()).toString(),ADDRESS_ID, address);
+        companyAvro = CompanyMapper.fromBeanToAvro(company);
     }
 
     @Test
@@ -76,11 +74,7 @@ class OutputKafkaProducerServiceImplTest {
     @Test
     void produceKafkaEventCompanyDelete() {
         //PREPARE
-        Company company = new Company(
-                UUID.randomUUID().toString(), "company-name", "lille", "esn", Timestamp.from(Instant.now()).toString());
         Message<?> message = buildKafkaMessage(companyAvro,TOPICS[1]);
-        String id = "uuid-1";
-        CompanyModel model = CompanyMapper.fromBeanToModel(company);
         //EXECUTE
         CompanyAvro actual = underTest.produceKafkaEventCompanyDelete(companyAvro);
         companyKafkaTemplate.send(message);
@@ -92,15 +86,11 @@ class OutputKafkaProducerServiceImplTest {
     }
 
     @Test
-    void produceKafkaEventCompanyEdit() throws CompanyNotFoundException {
+    void produceKafkaEventCompanyEdit() {
         //PREPARE
-        Company company = new Company(
-                UUID.randomUUID().toString(), "company-name", "lille", "esn", Timestamp.from(Instant.now()).toString());
         Message<?> message = buildKafkaMessage(companyAvro,TOPICS[2]);
         String id = "uuid-1";
-
         CompanyModel model = CompanyMapper.fromBeanToModel(company);
-        CompanyDto dto = CompanyMapper.fromBeanToDto(company);
         //EXECUTE
         Mockito.when(companyRepository.findById(id)).thenReturn(Optional.of(model));
         CompanyAvro actual = underTest.produceKafkaEventCompanyEdit(companyAvro);

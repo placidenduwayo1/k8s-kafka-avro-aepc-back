@@ -1,4 +1,4 @@
-package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.bean;
+package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company;
 
 public enum Type {
     CLIENT("client"),

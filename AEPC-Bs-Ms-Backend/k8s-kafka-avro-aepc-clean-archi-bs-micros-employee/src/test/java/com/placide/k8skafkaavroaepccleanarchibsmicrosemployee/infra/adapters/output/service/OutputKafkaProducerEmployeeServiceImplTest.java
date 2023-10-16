@@ -47,7 +47,6 @@ class OutputKafkaProducerEmployeeServiceImplTest {
     private Employee employee;
     private Address address;
     private EmployeeAvro employeeAvro;
-    private static final String EMPLOYEE_ID = "employee_id";
     private static final String ADDRESS_ID = "address_id";
 
     @BeforeEach

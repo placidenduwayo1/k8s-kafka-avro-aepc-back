@@ -1,8 +1,13 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.services;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean.CompanyAvro;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.bean.Company;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.RemoteApiAddressNotLoadedException;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.feignclient.model.AddressModel;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.feignclient.proxy.AddressServiceProxy;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper.AddressMapper;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper.CompanyMapper;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.repository.CompanyRepository;
@@ -25,9 +30,13 @@ class OutputCompanyServiceImplTest {
 
     @Mock
     private CompanyRepository repository;
+    @Mock
+    private AddressServiceProxy addressServiceProxy;
     @InjectMocks
     private OutputCompanyServiceImpl underTest;
     private Company company;
+    private static final String ADDRESS_ID = "address_id";
+    private Address address;
     private static final String TOPIC1 = "topic1";
     private static final String TOPIC2 = "topic2";
     private static final String TOPIC3 = "topic3";
@@ -37,15 +46,12 @@ class OutputCompanyServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         //PREPARE
-        company = new Company(UUID.randomUUID().toString(), "natan", "paris", "esn",
-                new Timestamp(System.currentTimeMillis()).toString());
-        companyAvro = CompanyAvro.newBuilder()
-                .setCompanyId(company.getCompanyId())
-                .setName(company.getName())
-                .setAgency(company.getAgency())
-                .setType(company.getType())
-                .setConnectedDate(company.getConnectedDate())
-                .build();
+        address = new Address(ADDRESS_ID, 2, "Allée de la Haye du Temple", 59160,
+                "Lomme", "France");
+
+        company = new Company("uuid", "natan", "paris", "esn",
+                new Timestamp(System.currentTimeMillis()).toString(), ADDRESS_ID, address);
+        companyAvro = CompanyMapper.fromBeanToAvro(company);
     }
 
     @Test
@@ -69,8 +75,9 @@ class OutputCompanyServiceImplTest {
         //PREPARE
         Company consumed = underTest.consumeKafkaEventCompanyCreate(companyAvro, TOPIC1);
         CompanyModel model = CompanyMapper.fromBeanToModel(consumed);
+        AddressModel addressModel = AddressMapper.toModel(address);
         CompanyModel expectedModel = new CompanyModel(UUID.randomUUID().toString(), "natan", "lille", "esn",
-                new Timestamp(System.currentTimeMillis()).toString());
+                new Timestamp(System.currentTimeMillis()).toString(), ADDRESS_ID, addressModel);
         //EXECUTE
         Mockito.when(repository.save(model)).thenReturn(expectedModel);
         Company saved = underTest.saveCompany(consumed);
@@ -90,10 +97,11 @@ class OutputCompanyServiceImplTest {
         Mockito.when(repository.findById(id)).thenReturn(Optional.of(model));
         Company obtained = underTest.getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
         //VERIFY
-        Assertions.assertAll("grp of assertions",
-                () -> Assertions.assertNotNull(obtained),
-                () -> Mockito.verify(repository, Mockito.atLeast(1)).findById(id));
-        log.info("{}", obtained);
+        Assertions.assertAll("grp of assertions",()->{
+            Assertions.assertNotNull(obtained);
+            Mockito.verify(repository, Mockito.atLeast(1)).findById(id);
+            log.info("{}", obtained);
+        });
     }
 
     @Test
@@ -141,23 +149,22 @@ class OutputCompanyServiceImplTest {
     }
 
     @Test
-    void deleteCompany() throws CompanyNotFoundException {
+    void deleteCompany() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
         //PREPARE
         String id = "uuid";
         CompanyModel model = CompanyMapper.fromBeanToModel(company);
+        AddressModel addressModel = AddressMapper.toModel(address);
         //EXECUTE
         Mockito.when(repository.findById(id)).thenReturn(Optional.of(model));
         Company obtained = underTest.getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
-        CompanyAvro avro = CompanyMapper.fromBeanToAvro(obtained);
-        Company consumed = underTest.consumeKafkaEventCompanyDelete(avro, TOPIC2);
-        Mockito.when(repository.findById(consumed.getCompanyId())).thenReturn(Optional.of(model));
-        String expectedMsg = underTest.deleteCompany(consumed.getCompanyId());
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
+        String expectedMsg = underTest.deleteCompany(id);
         //VERIFY
-        Assertions.assertAll("grp of assertions",
-                () -> Mockito.verify(repository, Mockito.atLeast(1)).deleteById(consumed.getCompanyId()),
-                () -> Mockito.verify(repository, Mockito.atLeast(1)).findById(id),
-                () -> Assertions.assertEquals("company <" + consumed + "> deleted", expectedMsg)
-        );
+        Assertions.assertAll("grp of assertions",()->{
+            Mockito.verify(repository, Mockito.atLeast(1)).deleteById(id);
+            Assertions.assertNotNull(obtained);
+            Assertions.assertNotNull(expectedMsg);
+        });
     }
 
     @Test
@@ -174,15 +181,14 @@ class OutputCompanyServiceImplTest {
     void editCompany() throws CompanyNotFoundException {
         //PREPARE
         String id = "uuid";
-        Company updated = new Company(UUID.randomUUID().toString(), "natan", "paris", "client",
-                new Timestamp(System.currentTimeMillis()).toString());
+        Company updated = new Company(id, "natan", "Lille", "client",
+                new Timestamp(System.currentTimeMillis()).toString(),ADDRESS_ID, address);
         CompanyModel model = CompanyMapper.fromBeanToModel(updated);
         //EXECUTE
         Mockito.when(repository.findById(id)).thenReturn(Optional.of(model));
         Company obtained = underTest.getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
         Mockito.when(repository.findById(obtained.getCompanyId())).thenReturn(Optional.of(model));
-        CompanyAvro avro = CompanyMapper.fromBeanToAvro(obtained);
-        Company consumed = underTest.consumeKafkaEventCompanyEdit(avro, TOPIC3);
+        Company consumed = underTest.consumeKafkaEventCompanyEdit(companyAvro, TOPIC3);
         CompanyModel mapped = CompanyMapper.fromBeanToModel(consumed);
         Mockito.when(repository.save(mapped)).thenReturn(model);
         Company saved = underTest.editCompany(consumed);

@@ -1,7 +1,7 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.output;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean.CompanyAvro;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.bean.Company;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
 
 import java.util.List;

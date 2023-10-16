@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CompanyDto {
-    private String id;
     private String name;
     private String agency;
     private String type;
+    private String addressId;
 }

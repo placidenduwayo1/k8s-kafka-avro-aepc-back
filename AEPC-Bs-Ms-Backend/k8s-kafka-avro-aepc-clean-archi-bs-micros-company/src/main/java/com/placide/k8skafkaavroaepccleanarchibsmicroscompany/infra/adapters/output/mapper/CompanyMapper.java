@@ -1,7 +1,8 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean.CompanyAvro;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.bean.Company;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.Address;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyDto;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyModel;
 import org.springframework.beans.BeanUtils;
@@ -24,28 +25,42 @@ public class CompanyMapper {
         return bean;
     }
 
-    public static CompanyDto fromBeanToDto(Company company) {
-        CompanyDto dto = new CompanyDto();
-        BeanUtils.copyProperties(company,dto);
-        return dto;
-    }
-
     public static CompanyAvro fromBeanToAvro(Company company){
+        Address addressAvro = Address.newBuilder()
+                .setAddressId(company.getAddressId())
+                .setNum(company.getAddress().getNum())
+                .setStreet(company.getAddress().getStreet())
+                .setPoBox(company.getAddress().getPoBox())
+                .setCity(company.getAddress().getCity())
+                .setCountry(company.getAddress().getCountry())
+                .build();
         return CompanyAvro.newBuilder()
                 .setCompanyId(company.getCompanyId())
                 .setName(company.getName())
                 .setAgency(company.getAgency())
                 .setType(company.getType())
                 .setConnectedDate(company.getConnectedDate())
+                .setAddressId(company.getAddressId())
+                .setAddress(addressAvro)
                 .build();
     }
 
     public static Company fromAvroToBean(CompanyAvro companyAvro){
+        com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address address =
+                new com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address(
+                        companyAvro.getAddressId(),
+                        companyAvro.getAddress().getNum(),
+                        companyAvro.getAddress().getStreet(),
+                        companyAvro.getAddress().getPoBox(),
+                        companyAvro.getAddress().getCity(),
+                        companyAvro.getAddress().getCountry()
+                );
         return new Company(
                 companyAvro.getCompanyId(),
                 companyAvro.getName(),
                 companyAvro.getAgency(),
                 companyAvro.getType(),
-                companyAvro.getConnectedDate());
+                companyAvro.getConnectedDate(),
+                companyAvro.getAddressId(), address);
     }
 }

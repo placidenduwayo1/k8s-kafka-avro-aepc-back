@@ -37,7 +37,7 @@ class OutputEmployeeServiceImplTest {
     private Employee employee;
     private EmployeeAvro employeeAvro;
     private Address address;
-    private static final String addressId = "uuid";
+    private static final String ADDRESS_ID = "uuid";
     private static final String TOPIC1 = "topic1";
     private static final String TOPIC2 = "topic2";
     private static final String TOPIC3 = "topic3";
@@ -47,9 +47,9 @@ class OutputEmployeeServiceImplTest {
         MockitoAnnotations.openMocks(this);
         String nom = "nduwayo";
         String prenom = "placide";
-        address = new Address(addressId, 184, "Avenue de Liège", 59300, "Valenciennes", "France");
+        address = new Address(ADDRESS_ID, 184, "Avenue de Liège", 59300, "Valenciennes", "France");
         employee = new Employee(UUID.randomUUID().toString(), prenom, nom, Validator.setEmail(prenom, nom), Timestamp.from(Instant.now()).toString(),"active",
-                "software-engineer",  addressId, address);
+                "software-engineer", ADDRESS_ID, address);
         employeeAvro = EmployeeMapper.fromBeanToAvro(employee);
     }
 
@@ -102,14 +102,14 @@ class OutputEmployeeServiceImplTest {
         AddressModel addressModel = AddressMapper.toModel(address);
         List<EmployeeModel> employeeModels = List.of(EmployeeMapper.toModel(employee));
         //EXECUTE
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(addressId)).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
         Mockito.when(repository.findByAddressId(addressModel.getAddressId())).thenReturn(employeeModels);
-        List<Employee> employees = underTest.loadEmployeesByRemoteAddress(addressId);
+        List<Employee> employees = underTest.loadEmployeesByRemoteAddress(ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("grp of assertions",
                 ()->Assertions.assertEquals(1,employees.size()),
-                ()->Mockito.verify(addressServiceProxy).loadRemoteApiGetAddressById(addressId),
-                ()->Mockito.verify(repository).findByAddressId(addressId));
+                ()->Mockito.verify(addressServiceProxy).loadRemoteApiGetAddressById(ADDRESS_ID),
+                ()->Mockito.verify(repository).findByAddressId(ADDRESS_ID));
     }
 
     @Test
@@ -121,13 +121,13 @@ class OutputEmployeeServiceImplTest {
         String type ="software-engineer";
         EmployeeModel model = EmployeeMapper.toModel(employee);
         //EXECUTE
-        Mockito.when(repository.findByFirstnameAndLastnameAndStateAndTypeAndAddressId(firstname,lastname,state,type,addressId))
+        Mockito.when(repository.findByFirstnameAndLastnameAndStateAndTypeAndAddressId(firstname,lastname,state,type, ADDRESS_ID))
                 .thenReturn(List.of(model));
-        List<Employee> employees = underTest.loadEmployeeByInfo(firstname,lastname,state,type,addressId);
+        List<Employee> employees = underTest.loadEmployeeByInfo(firstname,lastname,state,type, ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("grp of assertions",
                 ()->Assertions.assertEquals(1,employees.size()),
-                ()->Mockito.verify(repository).findByFirstnameAndLastnameAndStateAndTypeAndAddressId(firstname,lastname,state,type,addressId)
+                ()->Mockito.verify(repository).findByFirstnameAndLastnameAndStateAndTypeAndAddressId(firstname,lastname,state,type, ADDRESS_ID)
         );
     }
 
@@ -168,7 +168,7 @@ class OutputEmployeeServiceImplTest {
         //EXECUTE
         Mockito.when(repository.findById(employeeId)).thenReturn(Optional.of(employeeModel));
         Employee obtained = underTest.getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(addressId)).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
         String msg = underTest.deleteEmployee(employeeId);
 
         //VERIFY
@@ -194,7 +194,7 @@ class OutputEmployeeServiceImplTest {
         String firstname="Placide";
         String lastname ="Nduwayo";
         Employee updated = new Employee(employee.getEmployeeId(),firstname, lastname, Validator.setEmail(firstname, lastname),
-                employee.getHireDate(),"active", "software-engineer",  addressId, address);
+                employee.getHireDate(),"active", "software-engineer", ADDRESS_ID, address);
         EmployeeModel model = EmployeeMapper.toModel(updated);
         String id="uuid";
         //EXECUTE
@@ -217,11 +217,11 @@ class OutputEmployeeServiceImplTest {
         //PREPARE
         AddressModel model = AddressMapper.toModel(address);
         //EXECUTE
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(addressId)).thenReturn(Optional.of(model));
-        Optional<Address> obtained = underTest.getRemoteAddressById(addressId);
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(model));
+        Optional<Address> obtained = underTest.getRemoteAddressById(ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("grp of assertions",
-                ()->Mockito.verify(addressServiceProxy).loadRemoteApiGetAddressById(addressId),
+                ()->Mockito.verify(addressServiceProxy).loadRemoteApiGetAddressById(ADDRESS_ID),
                 ()->Assertions.assertNotNull(obtained));
     }
 

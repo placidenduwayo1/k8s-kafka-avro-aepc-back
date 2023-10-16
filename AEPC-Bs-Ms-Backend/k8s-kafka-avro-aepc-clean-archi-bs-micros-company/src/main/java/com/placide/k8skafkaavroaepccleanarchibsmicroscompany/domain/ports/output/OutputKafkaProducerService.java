@@ -1,6 +1,6 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.output;
 
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobean.CompanyAvro;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
 
 public interface OutputKafkaProducerService {
