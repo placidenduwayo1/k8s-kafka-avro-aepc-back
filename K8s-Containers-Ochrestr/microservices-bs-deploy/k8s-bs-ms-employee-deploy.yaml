@@ -40,4 +40,5 @@ spec:
       port: 8582
       targetPort: 8582
       name: 8582-8582
+      nodePort: 30582
   type: LoadBalancer
