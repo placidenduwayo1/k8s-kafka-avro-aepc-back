@@ -34,6 +34,6 @@ public class Validator {
     }
 
     public static boolean remoteAddressApiUnreachable(String addressId) {
-        return addressId.strip().equals(ExceptionMessage.ADDRESS_API_UNREACHABLE);
+        return addressId.strip().equals(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
     }
 }

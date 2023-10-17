@@ -6,10 +6,9 @@ public enum ExceptionsMsg {
     EMPLOYEE_FIELDS_EMPTY_EXCEPTION("Employee One or More Fields Empty Exception"),
     REMOTE_ADDRESS_API_EXCEPTION("Remote Address Api Unreachable Exception"),
     EMPLOYEE_UNKNOWN_STATE_EXCEPTION("Employee State Unknown Exception"),
-    EMPLOYEE_UNKNOWN_TYPE_EXCEPTION("Employee Type Unknown Exception");
-
+    EMPLOYEE_UNKNOWN_TYPE_EXCEPTION("Employee Type Unknown Exception"),
+    ADDRESS_API_UNREACHABLE("address api unreachable");
     private final String message;
-    public static final String ADDRESS_API_UNREACHABLE ="address api unreachable";
 
     ExceptionsMsg(String message) {
         this.message = message;

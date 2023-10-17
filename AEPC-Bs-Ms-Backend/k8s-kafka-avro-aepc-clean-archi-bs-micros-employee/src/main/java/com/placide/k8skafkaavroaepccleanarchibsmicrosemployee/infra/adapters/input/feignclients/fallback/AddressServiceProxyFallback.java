@@ -14,23 +14,23 @@ public class AddressServiceProxyFallback implements AddressServiceProxy {
     @Override
     public Optional<AddressModel> loadRemoteApiGetAddressById(String addressId) {
        return Optional.of(AddressModel.builder()
-                .addressId(ADDRESS_API_UNREACHABLE)
+                .addressId(ADDRESS_API_UNREACHABLE.getMessage())
                 .num(0)
-                .street(ADDRESS_API_UNREACHABLE)
+                .street(ADDRESS_API_UNREACHABLE.getMessage())
                 .poBox(0)
-                .city(ADDRESS_API_UNREACHABLE)
-                .country(ADDRESS_API_UNREACHABLE)
+                .city(ADDRESS_API_UNREACHABLE.getMessage())
+                .country(ADDRESS_API_UNREACHABLE.getMessage())
                 .build());
     }
     @Override
     public List<AddressModel> loadRemoteAddressIpiGetAllAddresses() {
         return List.of(AddressModel.builder()
-                .addressId(ADDRESS_API_UNREACHABLE)
+                .addressId(ADDRESS_API_UNREACHABLE.getMessage())
                 .num(0)
-                .street(ADDRESS_API_UNREACHABLE)
+                .street(ADDRESS_API_UNREACHABLE.getMessage())
                 .poBox(0)
-                .city(ADDRESS_API_UNREACHABLE)
-                .country(ADDRESS_API_UNREACHABLE)
+                .city(ADDRESS_API_UNREACHABLE.getMessage())
+                .country(ADDRESS_API_UNREACHABLE.getMessage())
                 .build());
     }
 }

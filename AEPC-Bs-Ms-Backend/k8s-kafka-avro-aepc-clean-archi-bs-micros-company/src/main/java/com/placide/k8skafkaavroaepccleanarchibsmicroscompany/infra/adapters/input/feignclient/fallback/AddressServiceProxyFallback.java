@@ -13,12 +13,12 @@ public class AddressServiceProxyFallback implements AddressServiceProxy {
     @Override
     public Optional<AddressModel> loadRemoteApiGetAddressById(String addressId) {
        return Optional.of(AddressModel.builder()
-                .addressId(ExceptionMessage.ADDRESS_API_UNREACHABLE)
+                .addressId(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
                 .num(0)
-                .street(ExceptionMessage.ADDRESS_API_UNREACHABLE)
+                .street(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
                 .poBox(0)
-                .city(ExceptionMessage.ADDRESS_API_UNREACHABLE)
-                .country(ExceptionMessage.ADDRESS_API_UNREACHABLE)
+                .city(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
+                .country(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
                 .build());
     }
 }

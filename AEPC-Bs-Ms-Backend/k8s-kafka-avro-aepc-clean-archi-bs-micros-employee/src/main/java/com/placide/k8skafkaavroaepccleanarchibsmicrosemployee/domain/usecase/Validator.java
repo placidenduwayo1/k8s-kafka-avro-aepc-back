@@ -43,7 +43,7 @@ public class Validator {
     }
 
     public static boolean remoteAddressApiUnreachable(String addressId) {
-        return addressId.strip().equals(ExceptionsMsg.ADDRESS_API_UNREACHABLE);
+        return addressId.strip().equals(ExceptionsMsg.ADDRESS_API_UNREACHABLE.getMessage());
     }
 
     public static void formatter(EmployeeDto employeeDto) {
@@ -58,6 +58,6 @@ public class Validator {
         return firstname.strip()
                 .replaceAll("\\s", "-")
                 .toLowerCase() + "." + lastname.strip()
-                .replaceAll("\\s", "-").toLowerCase() + "@natan.fr";
+                .replaceAll("\\s", "-").toLowerCase() + "@ineat.fr";
     }
 }

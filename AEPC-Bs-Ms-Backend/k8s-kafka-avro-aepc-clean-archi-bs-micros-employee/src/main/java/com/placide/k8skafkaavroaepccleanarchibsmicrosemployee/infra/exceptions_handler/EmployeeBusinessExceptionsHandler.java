@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class BusinessExceptionsHandler {
+public class EmployeeBusinessExceptionsHandler {
     @ExceptionHandler(value = EmployeeAlreadyExistsException.class)
     public ResponseEntity<Object> handleEmployeeAlreadyExistsException(){
         return new ResponseEntity<>(ExceptionsMsg.EMPLOYEE_ALREADY_EXISTS_EXCEPTION

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class BusinessExceptionHandler {
+public class CompanyBusinessExceptionHandler {
     @ExceptionHandler(value = CompanyNotFoundException.class)
     public ResponseEntity<Object> handleCompanyNotFoundException(){
         return new ResponseEntity<>(ExceptionMessage.COMPANY_NOT_FOUND_EXCEPTION.getMessage(), HttpStatus.NOT_FOUND);
@@ -23,5 +23,11 @@ public class BusinessExceptionHandler {
     @ExceptionHandler(value = CompanyTypeInvalidException.class)
     public ResponseEntity<Object> handleCompanyTypeInvalidException(){
         return new ResponseEntity<>(ExceptionMessage.COMPANY_TYPE_UNKNOWN_EXCEPTION.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value = RemoteApiAddressNotLoadedException.class)
+    public ResponseEntity<Object> handleRemoteApiAddressNotLoadedException(){
+        return new ResponseEntity<>(ExceptionMessage.REMOTE_ADDRESS_API_EXCEPTION
+                .getMessage(),
+                HttpStatus.NOT_ACCEPTABLE);
     }
 }
