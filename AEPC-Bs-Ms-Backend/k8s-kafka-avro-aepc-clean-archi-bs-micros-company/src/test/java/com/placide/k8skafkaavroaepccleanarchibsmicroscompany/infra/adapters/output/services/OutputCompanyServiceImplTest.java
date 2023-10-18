@@ -4,7 +4,6 @@ import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.Co
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.RemoteApiAddressNotLoadedException;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.feignclient.model.AddressModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.feignclient.proxy.AddressServiceProxy;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper.AddressMapper;
@@ -149,7 +148,7 @@ class OutputCompanyServiceImplTest {
     }
 
     @Test
-    void deleteCompany() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    void deleteCompany() throws CompanyNotFoundException {
         //PREPARE
         String id = "uuid";
         CompanyModel model = CompanyMapper.fromBeanToModel(company);
@@ -157,7 +156,7 @@ class OutputCompanyServiceImplTest {
         //EXECUTE
         Mockito.when(repository.findById(id)).thenReturn(Optional.of(model));
         Company obtained = underTest.getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(addressModel);
         String expectedMsg = underTest.deleteCompany(id);
         //VERIFY
         Assertions.assertAll("grp of assertions",()->{

@@ -2,10 +2,9 @@ package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.out
 
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.avrobeans.CompanyAvro;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.RemoteApiAddressNotLoadedException;
-import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.output.OutputCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.CompanyNotFoundException;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.output.OutputCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.output.OutputRemoteAddressService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.feignclient.proxy.AddressServiceProxy;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.mapper.AddressMapper;
@@ -106,8 +105,7 @@ public class OutputCompanyServiceImpl implements OutputCompanyService, OutputRem
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
-        return Optional.of(AddressMapper.toBean(addressServiceProxy.loadRemoteApiGetAddressById(addressId)
-                .orElseThrow(RemoteApiAddressNotLoadedException::new)));
+    public Optional<Address> getRemoteAddressById(String addressId) {
+        return Optional.of(AddressMapper.toBean(addressServiceProxy.loadRemoteApiGetAddressById(addressId)));
     }
 }
