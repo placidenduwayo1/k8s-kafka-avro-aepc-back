@@ -4,6 +4,7 @@ metadata:
   name: k8s-kafka-avro-aepc-bs-ms-company
   labels:
     app: k8s-kafka-avro-aepc-bs-ms-company
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -32,6 +33,7 @@ metadata:
   name: k8s-kafka-avro-aepc-bs-ms-company
   labels:
     app: k8s-kafka-avro-aepc-bs-ms-company
+  namespace: default
 spec:
   selector:
     app: k8s-kafka-avro-aepc-bs-ms-company

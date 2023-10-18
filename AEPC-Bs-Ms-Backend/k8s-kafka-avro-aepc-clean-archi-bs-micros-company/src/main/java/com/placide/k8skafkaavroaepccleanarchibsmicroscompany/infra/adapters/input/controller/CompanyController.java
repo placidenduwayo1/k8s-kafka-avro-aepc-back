@@ -26,12 +26,11 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/companies")
-    public List<String> produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
+    public Company produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
             CompanyEmptyFieldsException, CompanyAlreadyExistsException, CompanyTypeInvalidException, RemoteApiAddressNotLoadedException {
 
         Company consumed = companyService.produceKafkaEventCompanyCreate(dto);
-        Company saved = companyService.createCompany(consumed);
-        return List.of("produced consumed:"+consumed,"saved:"+saved);
+       return companyService.createCompany(consumed);
     }
     @GetMapping(value = "/companies")
     public List<Company> loadAllCompanies(){
