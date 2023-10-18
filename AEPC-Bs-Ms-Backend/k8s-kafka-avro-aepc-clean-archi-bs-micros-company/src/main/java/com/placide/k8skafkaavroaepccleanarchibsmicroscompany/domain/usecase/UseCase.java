@@ -146,8 +146,7 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
-        return Optional.ofNullable(outputRemoteAddressService.getRemoteAddressById(addressId)
-                .orElseThrow(RemoteApiAddressNotLoadedException::new));
+    public Optional<Address> getRemoteAddressById(String addressId)  {
+        return outputRemoteAddressService.getRemoteAddressById(addressId);
     }
 }

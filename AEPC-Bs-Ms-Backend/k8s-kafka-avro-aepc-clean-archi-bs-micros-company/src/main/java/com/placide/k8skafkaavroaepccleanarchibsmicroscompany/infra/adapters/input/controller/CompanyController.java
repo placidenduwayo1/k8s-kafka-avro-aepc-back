@@ -1,5 +1,6 @@
 package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.input.controller;
 
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.address.Address;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.*;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.input.InputCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
@@ -18,7 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompanyController {
     private final InputCompanyService companyService;
-    private final InputRemoteAddressService inputRemoteAddressService;
+    private final InputRemoteAddressService remoteAddressService;
+
     @Value("${personal.welcome.message}")
     private String welcome;
 
@@ -28,13 +30,12 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/companies")
-    public Company produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
+    public List<String> produceConsumeAndSaveCompany(@RequestBody CompanyDto dto) throws
             CompanyEmptyFieldsException, CompanyAlreadyExistsException, CompanyTypeInvalidException, RemoteApiAddressNotLoadedException {
 
         Company consumed = companyService.produceKafkaEventCompanyCreate(dto);
-        consumed.setAddress(inputRemoteAddressService.getRemoteAddressById(dto.getAddressId())
-                .orElseThrow(RemoteApiAddressNotLoadedException::new));
-       return companyService.createCompany(consumed);
+        Company saved = companyService.createCompany(consumed);
+       return List.of("produced & consumed:"+consumed,"saved:"+saved);
     }
     @GetMapping(value = "/companies")
     public List<Company> loadAllCompanies(){
@@ -45,14 +46,11 @@ public class CompanyController {
         return companyService.getCompanyById(id);
     }
     @PutMapping(value = "/companies/{id}")
-    public ResponseEntity<Object> updateCompany(@RequestBody CompanyDto dto, @PathVariable(name = "id") String id) throws
+    public List<String> updateCompany(@RequestBody CompanyDto dto, @PathVariable(name = "id") String id) throws
             CompanyEmptyFieldsException, CompanyTypeInvalidException, CompanyNotFoundException, RemoteApiAddressNotLoadedException {
         Company consumed = companyService.produceKafkaEventCompanyEdit(dto,id);
         Company saved = companyService.editCompany(consumed);
-        return new ResponseEntity<>(String
-                .format("<%s> to update is sent and consumed;%n <%s> is updated in db",
-                        consumed, saved),
-                HttpStatus.OK);
+        return List.of("produced & consumed:"+consumed,"saved:"+saved);
     }
     @DeleteMapping(value = "/companies/{id}")
     public ResponseEntity<Object> deleteCompany(@PathVariable(name = "id") String id) throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
@@ -60,5 +58,9 @@ public class CompanyController {
         companyService.deleteCompany(consumed.getCompanyId());
         return new ResponseEntity<>(String.format("<%s> to delete is sent to topic, %n <%s> is deleted from db",
                 consumed, id), HttpStatus.OK);
+    }
+    @GetMapping(value = "/companies/addresses/{addressId}")
+    public Optional<Address> getRemoteAddress(@PathVariable(name = "addressId") String addressId){
+        return remoteAddressService.getRemoteAddressById(addressId);
     }
 }
