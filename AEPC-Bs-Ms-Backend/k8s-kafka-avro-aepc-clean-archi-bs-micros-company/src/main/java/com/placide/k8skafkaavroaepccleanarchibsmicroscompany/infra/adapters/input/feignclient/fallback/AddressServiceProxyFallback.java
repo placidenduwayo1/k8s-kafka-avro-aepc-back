@@ -20,7 +20,7 @@ public class AddressServiceProxyFallback implements AddressServiceProxy {
                 .city(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
                 .country(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
                 .build();
-       log.info("resilience management {}",resilience);
+       log.info("resilience management <{}>",resilience);
        return resilience;
     }
 }

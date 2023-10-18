@@ -3,6 +3,7 @@ package com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.inp
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.*;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.input.InputCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.beans.company.Company;
+import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.ports.input.InputRemoteAddressService;
 import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.infra.adapters.output.models.CompanyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompanyController {
     private final InputCompanyService companyService;
+    private final InputRemoteAddressService inputRemoteAddressService;
     @Value("${personal.welcome.message}")
     private String welcome;
 
@@ -30,6 +32,8 @@ public class CompanyController {
             CompanyEmptyFieldsException, CompanyAlreadyExistsException, CompanyTypeInvalidException, RemoteApiAddressNotLoadedException {
 
         Company consumed = companyService.produceKafkaEventCompanyCreate(dto);
+        consumed.setAddress(inputRemoteAddressService.getRemoteAddressById(dto.getAddressId())
+                .orElseThrow(RemoteApiAddressNotLoadedException::new));
        return companyService.createCompany(consumed);
     }
     @GetMapping(value = "/companies")
