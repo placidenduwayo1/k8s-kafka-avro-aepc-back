@@ -154,7 +154,7 @@ services:
     image: placidenduwayo1/microservices-config-service:latest
     container_name: microservices-config-service
     build:
-      context: ./Utility-Services/microservices-config-service
+      context: ./AEPC-Utility-Services/microservices-config-service
       dockerfile: Dockerfile
     ports:
       - "8180:8180"
@@ -171,7 +171,7 @@ services:
     image: placidenduwayo1/gateway-service:latest
     container_name: gateway-service
     build:
-      context: ./Utility-Services/gateway-service
+      context: ./AEPC-Utility-Services/gateway-service
       dockerfile: Dockerfile
     ports:
       - "8181:8181"

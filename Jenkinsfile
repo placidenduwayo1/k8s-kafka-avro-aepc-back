@@ -20,10 +20,10 @@ pipeline {
                 dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                     sh 'mvn clean install' 
                 }
-                dir('Utility-Services/microservices-config-service/'){
+                dir('AEPC-Utility-Services/microservices-config-service/'){
                     sh 'mvn clean install' 
                 }
-                dir('Utility-Services/gateway-service/'){
+                dir('AEPC-Utility-Services/gateway-service/'){
                     sh 'mvn clean install' 
                 }
             }
@@ -41,10 +41,10 @@ pipeline {
                     dir('AEPC-Bs-Ms-Backend/k8s-kafka-avro-aepc-clean-archi-bs-micros-project/'){
                         archiveArtifacts '**/target/*.jar'
                     }
-                    dir('Utility-Services/microservices-config-service/'){
+                    dir('AEPC-Utility-Services/microservices-config-service/'){
                         archiveArtifacts '**/target/*.jar'
                     }
-                    dir('Utility-Services/gateway-service/'){
+                    dir('AEPC-Utility-Services/gateway-service/'){
                         archiveArtifacts '**/target/*.jar'
                     }
                 }
