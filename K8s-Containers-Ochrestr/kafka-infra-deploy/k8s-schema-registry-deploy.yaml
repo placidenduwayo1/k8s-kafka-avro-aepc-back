@@ -4,7 +4,7 @@ metadata:
   name: schema-registry-service
   labels:
     app: schema-registry-service
-  namespace: kafka-infra-ns
+  namespace: microservices-ns
 spec:
   replicas: 1
   selector:
@@ -27,12 +27,9 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: schema_registry_hostname
-                  name: kafka-infra-env-variables-cm
+                  name: env-variables-cm
             - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
-              valueFrom:
-                configMapKeyRef:
-                  key: kafka_bootstrap_servers
-                  name: kafka-infra-env-variables-cm
+              value: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -41,7 +38,7 @@ metadata:
   name: schema-registry-service
   labels:
     app: schema-registry-service
-  namespace: kafka-infra-ns
+  namespace: microservices-ns
 spec:
   selector:
     app: schema-registry-service

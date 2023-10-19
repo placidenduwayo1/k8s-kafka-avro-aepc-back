@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kafka-infra-env-variables-cm
-  namespace: kafka-infra-ns
+  name: env-variables-cm
+  namespace: microservices-ns
   labels:
     app: env-variables-cm
 data:

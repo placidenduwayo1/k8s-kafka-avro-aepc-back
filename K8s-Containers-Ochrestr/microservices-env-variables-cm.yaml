@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: microservices-env-variables-cm
-  namespace: microservices-ns
-  labels:
-    app: microservices-env-variables-cm
-data:
-  kafka_bootstrap_servers: "kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094"

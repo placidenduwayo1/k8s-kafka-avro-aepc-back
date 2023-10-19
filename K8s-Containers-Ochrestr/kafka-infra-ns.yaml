@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kafka-infra-ns
-  labels:
-    app: kafka-infra-ns
-      
