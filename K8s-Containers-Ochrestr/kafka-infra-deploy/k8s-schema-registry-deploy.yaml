@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: kafka-infra-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schema-registry-service
+  template:
+    metadata:
+      name: schema-registry-service
+      labels:
+        app: schema-registry-service
+    spec:
+      containers:
+        - name: schema-registry-service
+          image: confluentinc/cp-schema-registry:5.4.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SCHEMA_REGISTRY_HOST_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: schema_registry_hostname
+                  name: kafka-infra-env-variables-cm
+            - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_bootstrap_servers
+                  name: kafka-infra-env-variables-cm
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: kafka-infra-ns
+spec:
+  selector:
+    app: schema-registry-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30081
+      name: 8081-8081
+  type: NodePort
+      

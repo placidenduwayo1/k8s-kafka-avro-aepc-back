@@ -4,7 +4,7 @@ metadata:
   name: k8s-kafka-avro-aepc-bs-ms-employee
   labels:
     app: k8s-kafka-avro-aepc-bs-ms-employee
-  namespace: default
+  namespace: microservices-ns
 spec:
   replicas: 1
   selector:
@@ -24,7 +24,10 @@ spec:
             - containerPort: 8582
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
+              valueFrom:
+                configMapKeyRef:
+                  name: microservices-env-variables-cm
+                  key: kafka_bootstrap_servers
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -33,7 +36,7 @@ metadata:
   name: k8s-kafka-avro-aepc-bs-ms-employee
   labels:
     app: k8s-kafka-avro-aepc-bs-ms-employee
-  namespace: default
+  namespace: microservices-ns
 spec:
   selector:
     app: k8s-kafka-avro-aepc-bs-ms-employee

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafdrop-ui
+  labels:
+    app: kafdrop-ui
+  namespace: kafka-infra-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafdrop-ui
+  template:
+    metadata:
+      name: kafdrop-ui
+      labels:
+        app: kafdrop-ui
+    spec:
+      containers:
+        - name: kafdrop-ui
+          image: obsidiandynamics/kafdrop
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+          env:
+            - name: KAFKA_BROKERCONNECT
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-infra-env-variables-cm
+                  key: kafka_bootstrap_servers
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafdrop-ui
+  labels:
+    app: kafdrop-ui
+  namespace: kafka-infra-ns
+spec:
+  selector:
+    app: kafdrop-ui
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      name: 9000-9000
+      nodePort: 30000
+  type: NodePort

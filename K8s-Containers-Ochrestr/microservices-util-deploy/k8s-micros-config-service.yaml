@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservices-config-service
+  labels:
+    app: microservices-config-service
+  namespace: microservices-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservices-config-service
+  template:
+    metadata:
+      name: microservices-config-service
+      labels:
+        app: microservices-config-service
+    spec:
+      containers:
+        - name: microservices-config-service
+          image: placidenduwayo1/microservices-config-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8180
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-config-service
+  labels:
+    app: microservices-config-service
+  namespace: microservices-ns
+spec:
+  selector:
+    app: microservices-config-service
+  ports:
+    - protocol: TCP
+      port: 8180
+      targetPort: 8180
+      nodePort: 30180
+  type: NodePort
+      

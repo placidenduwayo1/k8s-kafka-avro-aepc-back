@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-infra-env-variables-cm
+  namespace: kafka-infra-ns
+  labels:
+    app: env-variables-cm
+data:
+  schema_registry_hostname: "schema-registry-service"
+  kafka_bootstrap_servers: "kafka-broker-1:9092,kafka-broker-1:9093,kafka-broker-1:9094"
+  kafka_broker_id_0: "0"
+  kafka_broker_id_1: "1"
+  kafka_broker_id_2: "2"
+  kafka_listeners_security_protocol: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+  zookeeper_connect: "zookeeper:2181"
+  kafka_listeners_1: "PLAINTEXT://:9092,PLAINTEXT_HOST://0.0.0.0:19092"
+  kafka_advertised_listeners_1: "PLAINTEXT://kafka-broker-1:9092,PLAINTEXT_HOST://localhost:19092"
+  kafka_listeners_2: "PLAINTEXT://:9093,PLAINTEXT_HOST://0.0.0.0:29092"
+  kafka_advertised_listeners_2: "PLAINTEXT://kafka-broker-2:9093,PLAINTEXT_HOST://localhost:29092"
+  kafka_listeners_3: "PLAINTEXT://:9094,PLAINTEXT_HOST://0.0.0.0:39092"
+  kafka_advertised_listeners_3: "PLAINTEXT://kafka-broker-3:9094,PLAINTEXT_HOST://localhost:39092"

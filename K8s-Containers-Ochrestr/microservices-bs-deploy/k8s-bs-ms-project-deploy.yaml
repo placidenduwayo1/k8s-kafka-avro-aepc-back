@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-kafka-avro-aepc-bs-ms-company
+  name: k8s-kafka-avro-aepc-bs-ms-project
   labels:
-    app: k8s-kafka-avro-aepc-bs-ms-company
+    app: k8s-kafka-avro-aepc-bs-ms-project
   namespace: microservices-ns
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-kafka-avro-aepc-bs-ms-company
+      app: k8s-kafka-avro-aepc-bs-ms-project
   template:
     metadata:
-      name: k8s-kafka-avro-aepc-bs-ms-company
+      name: k8s-kafka-avro-aepc-bs-ms-project
       labels:
-        app: k8s-kafka-avro-aepc-bs-ms-company
+        app: k8s-kafka-avro-aepc-bs-ms-project
     spec:
       containers:
-        - name: k8s-kafka-avro-aepc-bs-ms-company
-          image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-company
+        - name: k8s-kafka-avro-aepc-bs-ms-project
+          image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-project
           imagePullPolicy: Always
           ports:
-            - containerPort: 8583
+            - containerPort: 8584
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               valueFrom:
@@ -33,17 +33,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8s-kafka-avro-aepc-bs-ms-company
+  name: k8s-kafka-avro-aepc-bs-ms-project
   labels:
-    app: k8s-kafka-avro-aepc-bs-ms-company
+    app: k8s-kafka-avro-aepc-bs-ms-project
   namespace: microservices-ns
 spec:
   selector:
-    app: k8s-kafka-avro-aepc-bs-ms-company
+    app: k8s-kafka-avro-aepc-bs-ms-project
   ports:
     - protocol: TCP
-      port: 8583
-      targetPort: 8583
-      name: 8583-8583
-      nodePort: 30583
+      port: 8584
+      targetPort: 8584
+      name: 8584-8584
+      nodePort: 30584
   type: LoadBalancer
+      

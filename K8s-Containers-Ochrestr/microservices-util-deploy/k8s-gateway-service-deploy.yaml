@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  labels:
+    app: gateway-service
+  namespace: microservices-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      name: gateway-service
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: placidenduwayo1/gateway-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8181
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  labels:
+    app: gateway-service
+  namespace: microservices-ns
+spec:
+  selector:
+    app: gateway-service
+  ports:
+    - protocol: TCP
+      port: 8181
+      targetPort: 8181
+      nodePort: 30181
+  type: NodePort
+  
