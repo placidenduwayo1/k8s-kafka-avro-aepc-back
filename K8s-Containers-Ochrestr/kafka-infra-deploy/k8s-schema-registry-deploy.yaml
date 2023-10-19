@@ -29,7 +29,7 @@ spec:
                   key: schema_registry_hostname
                   name: env-variables-cm
             - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
-              value: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-3:9094
+              value: kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-2:9094
       restartPolicy: Always
 ---
 apiVersion: v1

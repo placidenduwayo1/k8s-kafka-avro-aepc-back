@@ -7,7 +7,7 @@ metadata:
     app: env-variables-cm
 data:
   schema_registry_hostname: "schema-registry-service"
-  kafka_bootstrap_servers: "kafka-broker-1:9092,kafka-broker-1:9093,kafka-broker-1:9094"
+  kafka_bootstrap_servers: "kafka-broker-1:9092,kafka-broker-2:9093,kafka-broker-2:9094"
   kafka_broker_id_0: "0"
   kafka_broker_id_1: "1"
   kafka_broker_id_2: "2"
