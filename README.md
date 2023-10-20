@@ -2,6 +2,7 @@
 - application base microservices that manage addresses, employees, companies and projects. 
 - each business microservices of the application is implemented into clean architecture. 
 - each writing event is published and istributed using kafka infrastructure.
+- avro schema is used to serialize data sent to kafka topics
 ## business microservices
 - Address-microservice 
 - Employee-microservice 
@@ -58,21 +59,21 @@ mysql database docker image for peristing data from business microservices
 
 - business microservices:
   - k8s-kafka-avro-aepc-bs-ms-address
-  - - k8s-kafka-avro-aepc-bs-ms-employee
-  - - k8s-kafka-avro-aepc-bs-ms-company
-  - - k8s-kafka-avro-aepc-bs-ms-project
+  - k8s-kafka-avro-aepc-bs-ms-employee
+  - k8s-kafka-avro-aepc-bs-ms-company
+  - k8s-kafka-avro-aepc-bs-ms-project
 
 ### containers orchestration with Kubernetes
 all containers of the application are deployed and orchestrated in local minikube cluster
 - database: mysql-db
 - zookeeper
 - kafka servers: kafka-broker-1, kafka-broker-2,kafka-broker-3
-- schema-regsitry
-- kafdrop UI
-- utility services containers: config-service, gateway-service
-- business-microservices containers: bs-ms-address, bs-ms-employee, bs-ms-company, bs-ms-project
+- schema-registry-service
+- kafdrop-ui
+- utility services containers: microservices-config-service, gateway-service
+- business-microservices containers: k8s-kafka-avro-aepc-bs-ms-address, k8s-kafka-avro-aepc-bs-ms-employee, k8s-kafka-avro-aepc-bs-ms-company, k8s-kafka-avro-aepc-bs-ms-project
 
-the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
+the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment in minikube cluster with 3 nodes: **one master** node and **two worker nodes**
 
     
 ## architecture kafka inside business microservice
@@ -86,7 +87,7 @@ the folder **./K8s-Containers-Ochrestr** contains k8s containers deployment
 - avro uses the defined and registered schema to serialize avents before publishing them into topics
 
 # general architecture of the project
-![k8s-kafka-avro-aepc-clean-archi](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/991934a1-7249-4135-9d80-48a07fd2c594)
+![k8s-kafka-avro-aepc-clean-archi](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/91bf9102-e790-448e-9988-3b5ba37ae7b6)
 
 - To access to backend business microservices, the client goes through a ***gateway-service*** pod (the ***gateway-service-pod*** is exposed by the service with same name) and indicates the name of service that exposes the pod he wants to consume as following:
   - ```http://gateway-ip:k8s-generated-port/service-name-exposing-pod/endpoint```
