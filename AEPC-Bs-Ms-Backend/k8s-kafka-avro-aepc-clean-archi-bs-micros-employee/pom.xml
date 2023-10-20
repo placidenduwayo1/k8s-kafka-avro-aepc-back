@@ -48,15 +48,15 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
         <!-- kubernetes dependency-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
-        </dependency>-->
-        <!--   eureka client dependency-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
         </dependency>
+        <!--   eureka client dependency-->
+       <!-- <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>-->
         <!-- openfeign dependency-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

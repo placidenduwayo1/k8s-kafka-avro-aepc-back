@@ -48,15 +48,9 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
         <!-- kubernetes dependency-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
-        </dependency>-->
-
-        <!--   eureka client dependency-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
         </dependency>
         <!-- for openfeign dependency-->
         <dependency>
@@ -89,11 +83,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- in memory h2 test purpose-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
         </dependency>
         <!-- spring kafka connector dependency for test purpose-->
         <dependency>

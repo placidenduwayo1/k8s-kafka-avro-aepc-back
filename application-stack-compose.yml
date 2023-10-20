@@ -166,26 +166,6 @@ services:
       start_period: 40s
     networks:
       - kafka-network
-
-  microservices-registry-service:
-    image: placidenduwayo1/microservices-registry-service:latest
-    container_name: microservices-registry-service
-    build:
-      context: ./AEPC-Utility-Services/microservices-registry-service
-      dockerfile: Dockerfile
-    ports:
-      - "8761:8761"
-    healthcheck:
-      test: [ "CMD", "curl", "-I", "http://microservices-registry-service:8761" ]
-      interval: 15s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - kafka-network
-    depends_on:
-      microservices-config-service:
-        condition: service_healthy
   
   gateway-service:
     image: placidenduwayo1/gateway-service:latest
