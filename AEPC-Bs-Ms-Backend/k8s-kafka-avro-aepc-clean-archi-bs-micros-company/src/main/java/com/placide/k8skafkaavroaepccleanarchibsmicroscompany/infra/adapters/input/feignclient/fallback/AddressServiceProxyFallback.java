@@ -12,14 +12,13 @@ import com.placide.k8skafkaavroaepccleanarchibsmicroscompany.domain.exceptions.E
 public class AddressServiceProxyFallback implements AddressServiceProxy {
     @Override
     public AddressModel loadRemoteApiGetAddressById(String addressId) {
-       AddressModel resilience = AddressModel.builder()
-                .addressId(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
-                .num(0)
-                .street(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
-                .poBox(0)
-                .city(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
-                .country(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage())
-                .build();
+       AddressModel resilience = new AddressModel();
+       resilience.setAddressId(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
+       resilience.setNum(0);
+       resilience.setStreet(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
+       resilience.setPoBox(0);
+       resilience.setCity(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
+       resilience.setCountry(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
        log.info("[Fallback] resilience management {}",resilience);
        return resilience;
     }
