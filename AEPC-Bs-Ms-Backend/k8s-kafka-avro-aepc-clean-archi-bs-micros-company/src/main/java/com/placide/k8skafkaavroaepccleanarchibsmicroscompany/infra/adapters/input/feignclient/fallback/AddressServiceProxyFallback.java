@@ -19,7 +19,7 @@ public class AddressServiceProxyFallback implements AddressServiceProxy {
        resilience.setPoBox(0);
        resilience.setCity(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
        resilience.setCountry(ExceptionMessage.ADDRESS_API_UNREACHABLE.getMessage());
-       log.info("[Fallback] resilience management {}",resilience);
+       log.info("!!!!!!!!!!!!!!!!!![Fallback] resilience management {}",resilience);
        return resilience;
     }
 }
