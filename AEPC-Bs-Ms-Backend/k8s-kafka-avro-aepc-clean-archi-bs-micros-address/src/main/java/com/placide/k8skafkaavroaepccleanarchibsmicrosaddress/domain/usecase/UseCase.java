@@ -40,6 +40,16 @@ public class UseCase implements InputAddressService {
         }
     }
 
+    //Unary operator on address
+    private UnaryOperator<Address> formatAddressPrint(){
+        return  (var address)->{
+            address.setAddressId("<"+address.getAddressId()+">");
+            address.setStreet("<"+address.getStreet()+">");
+            address.setCity("<"+address.getCity()+">");
+            address.setCountry("<"+address.getCountry()+">");
+            return address;
+        };
+    }
     /*send address event to kafka topic and consumer consumes it*/
     @Override
     public Address produceAndConsumeAddressAdd(AddressDto addressDto) throws
@@ -66,7 +76,10 @@ public class UseCase implements InputAddressService {
 
     @Override
     public List<Address> getAllAddresses() {
-        return outputAddressService.getAllAddresses();
+        List<Address> addresses = outputAddressService.getAllAddresses();
+       return addresses.stream()
+               .map(formatAddressPrint())
+               .toList();
     }
 
     @Override
@@ -74,7 +87,6 @@ public class UseCase implements InputAddressService {
        Address address = outputAddressService.getAddress(addressID).orElseThrow(
                AddressNotFoundException::new
        );
-
         return Optional.of(address);
     }
     @Override
@@ -87,16 +99,8 @@ public class UseCase implements InputAddressService {
             }
         }
 
-        UnaryOperator<Address> mapper = (var address)->{
-            address.setAddressId("<"+address.getAddressId()+">");
-            address.setStreet("<"+address.getStreet()+">");
-            address.setCity("<"+city+">");
-            address.setCountry("<"+address.getCountry()+">");
-            return address;
-        };
-
         return addresses.stream()
-                .map(mapper)
+                .map(formatAddressPrint())
                 .toList();
     }
     /*send addressId event to kafka topic and consumer consumes it*/
@@ -129,5 +133,4 @@ public class UseCase implements InputAddressService {
     public Address editAddress(Address address) {
         return outputAddressService.updateAddress(address);
     }
-
 }
