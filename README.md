@@ -12,7 +12,6 @@
 
 ## 1. utility microservices
 - microservices-config-service: to centralize and distribute all microservices configurations
-- microservices-registry-service: to register the name of each service
 - gateway-service: a gateway between backend of microservices and front
 
 ## 2. kafka infrastructure
@@ -54,14 +53,14 @@ mysql database docker image for peristing data from business microservices
   - kafdrop (one instance) for web UI for monitoring kafka brokers, topics and events produced
 - utility microservices:
   - a config service for managing and externalize services configuration
-  - a registry service to serve gateway service and business services to registry with their name
   - a gateway service
+  - a Kubernetes discovery service dependency for microservices registration
 
 - business microservices:
-  - bs-ms-address
-  - bs-ms-employee
-  - bs-ms-company
-  - bs-ms-project
+  - k8s-kafka-avro-aepc-bs-ms-address
+  - - k8s-kafka-avro-aepc-bs-ms-employee
+  - - k8s-kafka-avro-aepc-bs-ms-company
+  - - k8s-kafka-avro-aepc-bs-ms-project
 
 ### containers orchestration with Kubernetes
 all containers of the application are deployed and orchestrated in local minikube cluster
