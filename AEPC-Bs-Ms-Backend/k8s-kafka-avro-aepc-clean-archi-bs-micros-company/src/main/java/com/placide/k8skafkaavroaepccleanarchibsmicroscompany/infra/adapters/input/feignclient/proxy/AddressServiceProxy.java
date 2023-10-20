@@ -8,8 +8,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
 @FeignClient(name = "k8s-kafka-avro-aepc-bs-ms-address", fallback = AddressServiceProxyFallback.class)
 @Qualifier(value = "address-service-proxy")
 public interface AddressServiceProxy {
