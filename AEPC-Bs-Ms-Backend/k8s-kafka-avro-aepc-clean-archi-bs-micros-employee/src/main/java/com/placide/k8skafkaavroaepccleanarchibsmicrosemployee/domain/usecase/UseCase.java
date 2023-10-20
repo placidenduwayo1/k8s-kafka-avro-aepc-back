@@ -45,10 +45,9 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
         } else if (!Validator.checkTypeValidity(employeeDto.getType())) {
             throw new EmployeeTypeInvalidException();
         }
-
-        Address address = getRemoteAddressById(employeeDto.getAddressId()).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        Address address = getRemoteAddressById(employeeDto.getAddressId());
         if (Validator.remoteAddressApiUnreachable(address.getAddressId())) {
-            throw new RemoteApiAddressNotLoadedException();
+            throw new RemoteApiAddressNotLoadedException(address.toString());
         }
     }
 
@@ -60,7 +59,7 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
     }
 
     private void setEmployeeDependency(Employee employee, String addressId) throws RemoteApiAddressNotLoadedException {
-        Address address = getRemoteAddressById(addressId).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        Address address = getRemoteAddressById(addressId);
         employee.setAddressId(addressId);
         employee.setAddress(address);
     }
@@ -133,7 +132,7 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
 
     @Override
     public List<Employee> loadEmployeesByRemoteAddress(String addressId) throws RemoteApiAddressNotLoadedException {
-        Address address = outputRemoteAddressService.getRemoteAddressById(addressId).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        Address address = outputRemoteAddressService.getRemoteAddressById(addressId);
         return outputEmployeeService.loadEmployeesByRemoteAddress(address.getAddressId());
     }
 
@@ -173,9 +172,8 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
-        return Optional.ofNullable(outputRemoteAddressService.getRemoteAddressById(addressId)
-                .orElseThrow(RemoteApiAddressNotLoadedException::new));
+    public Address getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
+        return outputRemoteAddressService.getRemoteAddressById(addressId);
     }
 
     @Override

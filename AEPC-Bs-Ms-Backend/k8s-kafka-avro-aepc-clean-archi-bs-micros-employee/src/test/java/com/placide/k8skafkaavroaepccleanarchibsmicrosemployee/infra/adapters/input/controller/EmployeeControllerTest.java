@@ -55,7 +55,7 @@ class EmployeeControllerTest {
             EmployeeEmptyFieldsException, EmployeeStateInvalidException, EmployeeAlreadyExistsException {
         //PREPARE
         //EXECUTE
-        Mockito.when(remoteInputAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteInputAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Address actual1 = underTest.getRemoteAddress(ADDRESS_ID);
         Mockito.when(inputEmployeeService.produceKafkaEventEmployeeCreate(dto)).thenReturn(bean);
         Mockito.when(inputEmployeeService.createEmployee(bean)).thenReturn(new Employee());
@@ -75,7 +75,7 @@ class EmployeeControllerTest {
     void getRemoteAddress() throws RemoteApiAddressNotLoadedException {
         //PREPARE
         //EXECUTE
-        Mockito.when(remoteInputAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteInputAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Address actual = underTest.getRemoteAddress(ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("assertions",()->{

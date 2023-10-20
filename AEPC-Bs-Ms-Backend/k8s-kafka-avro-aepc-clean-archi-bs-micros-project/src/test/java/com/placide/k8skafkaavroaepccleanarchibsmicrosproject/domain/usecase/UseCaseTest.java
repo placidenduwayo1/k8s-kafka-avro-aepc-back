@@ -74,8 +74,8 @@ class UseCaseTest {
         //PREPARE
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
         Mockito.when(kafkaProducerService.produceKafkaEventProjectCreate(Mockito.any(ProjectAvro.class))).thenReturn(projectAvro);
         Project actual = underTest.produceKafkaEventProjectCreate(projectDto);
         //VERIFY
@@ -99,8 +99,8 @@ class UseCaseTest {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
         Mockito.when(outputProjectService.saveProject(Mockito.any(Project.class))).thenReturn(bean);
         Project saved = underTest.createProject(bean);
         //VERIFY
@@ -150,8 +150,8 @@ class UseCaseTest {
         ProjectAvro projectAvro = Mapper.fromBeanToAvro(project);
         //EXECUTE
         Mockito.when(outputProjectService.getProject(PROJECT_ID)).thenReturn(Optional.of(project));
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
         Mockito.when(kafkaProducerService.produceKafkaEventProjectDelete(projectAvro)).thenReturn(projectAvro);
         Project actual = underTest.produceKafkaEventProjectDelete(PROJECT_ID);
         //VERIFY
@@ -200,9 +200,9 @@ class UseCaseTest {
         log.info("{}",projectAvro.toString());
         //EXECUTE
         Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID))
-                .thenReturn(Optional.of(employee));
+                .thenReturn(employee);
         Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID))
-                .thenReturn(Optional.of(company));
+                .thenReturn(company);
         Mockito.when(outputProjectService.getProject(PROJECT_ID)).thenReturn(Optional.of(project));
         Mockito.when(kafkaProducerService.produceKafkaEventProjectEdit(Mockito.any(ProjectAvro.class)))
                 .thenReturn(projectAvro);
@@ -225,8 +225,8 @@ class UseCaseTest {
         //PREPARE
         Project bean = Mapper.fromTo(projectDto);
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
         Mockito.when(outputProjectService.updateProject(bean)).thenReturn(bean);
         Project updated = underTest.updateProject(bean);
         //VERIFY
@@ -243,9 +243,9 @@ class UseCaseTest {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
-        Employee obtained = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID).orElseThrow(RemoteEmployeeApiException::new);
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
+        Employee obtained = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID);
         Mockito.when(outputProjectService.loadProjectsAssignedToEmployee(EMPLOYEE_ID)).thenReturn(beans);
         List<Project> projects = underTest.loadProjectsAssignedToEmployee(EMPLOYEE_ID);
         //VERIFY
@@ -264,9 +264,9 @@ class UseCaseTest {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
-        Company actual = underTest.getRemoteApiCompany(COMPANY_ID).orElseThrow(RemoteCompanyApiException::new);
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
+        Company actual = underTest.getRemoteApiCompany(COMPANY_ID);
         Mockito.when(outputProjectService.loadProjectsOfCompanyC(actual.getCompanyId())).thenReturn(beans);
         List<Project> actuals = underTest.loadProjectsOfCompanyC(COMPANY_ID);
         //VERIFY
@@ -284,8 +284,8 @@ class UseCaseTest {
         //PREPARE
         List<Project> beans = List.of(Mapper.fromTo(projectDto));
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
         Mockito.when(outputProjectService.getAllProjects()).thenReturn(beans);
         List<Project> actuals = underTest.getAllProjects();
         //VERIFY
@@ -301,8 +301,8 @@ class UseCaseTest {
     void getRemoteCompanyAPI() throws RemoteCompanyApiException {
         //PREPARE
         //EXECUTE
-        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(Optional.of(company));
-        Company actual = underTest.getRemoteApiCompany(COMPANY_ID).orElseThrow(RemoteCompanyApiException::new);
+        Mockito.when(outputRemoteAPICompanyService.getRemoteCompanyAPI(COMPANY_ID)).thenReturn(company);
+        Company actual = underTest.getRemoteApiCompany(COMPANY_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",
                 () -> Mockito.verify(outputRemoteAPICompanyService, Mockito.atLeast(1)).getRemoteCompanyAPI(COMPANY_ID),
@@ -313,11 +313,12 @@ class UseCaseTest {
     void getRemoteEmployeeAPI() throws RemoteEmployeeApiException {
         //PREPARE
         //EXECUTE
-        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Employee actual = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID).orElseThrow(RemoteEmployeeApiException::new);
+        Mockito.when(outputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Employee actual = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",
-                () -> Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1)).getRemoteEmployeeAPI(EMPLOYEE_ID),
+                () -> Mockito.verify(outputRemoteAPIEmployeeService, Mockito.atLeast(1))
+                        .getRemoteEmployeeAPI(EMPLOYEE_ID),
                 () -> Assertions.assertEquals(employee, actual));
     }
 }

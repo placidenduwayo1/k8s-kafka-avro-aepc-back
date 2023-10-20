@@ -29,7 +29,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     private final OutputRemoteApiCompanyService outputCompanyAPIService;
     private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
-    public UseCase(OutputKafkaProducerProjectService kafkaProducerService, OutputProjectService outputProjectService, OutputRemoteApiEmployeeService outputEmployeeAPIService, OutputRemoteApiCompanyService outputCompanyAPIService) {
+    public UseCase(OutputKafkaProducerProjectService kafkaProducerService, OutputProjectService outputProjectService,
+                   OutputRemoteApiEmployeeService outputEmployeeAPIService, OutputRemoteApiCompanyService outputCompanyAPIService) {
         this.kafkaProducerService = kafkaProducerService;
         this.outputProjectService = outputProjectService;
         this.outputEmployeeAPIService = outputEmployeeAPIService;
@@ -37,7 +38,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     }
 
     private void checkProjectValidity(String name, String desc, int priority, String state, String employeeId, String companyId) throws
-            ProjectFieldsEmptyException, ProjectPriorityInvalidException, ProjectStateInvalidException, RemoteEmployeeApiException, RemoteCompanyApiException {
+            ProjectFieldsEmptyException, ProjectPriorityInvalidException, ProjectStateInvalidException, RemoteEmployeeApiException,
+            RemoteCompanyApiException {
         if (!Validator.isValidProject(name, desc, employeeId, companyId)) {
             throw new ProjectFieldsEmptyException();
         } else if (!Validator.isValidProject(priority)) {
@@ -45,13 +47,13 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
         } else if (!Validator.isValidProject(state)) {
             throw new ProjectStateInvalidException();
         }
-        Employee employee = getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
+        Employee employee = getRemoteEmployeeAPI(employeeId);
         if (Validator.remoteEmployeeApiUnreachable(employee.getEmployeeId())) {
-            throw new RemoteEmployeeApiException();
+            throw new RemoteEmployeeApiException(employee.toString());
         }
-        Company company = getRemoteApiCompany(companyId).orElseThrow(RemoteCompanyApiException::new);
+        Company company = getRemoteApiCompany(companyId);
         if (Validator.remoteCompanyApiUnreachable(company.getCompanyId())) {
-            throw new RemoteCompanyApiException();
+            throw new RemoteCompanyApiException(company.toString());
         }
     }
 
@@ -64,10 +66,10 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
 
     private void setProjectDependencies(Project project, String employeeId, String companyId) throws RemoteEmployeeApiException,
             RemoteCompanyApiException {
-        Employee employee = getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
+        Employee employee = getRemoteEmployeeAPI(employeeId);
         project.setEmployeeId(employeeId);
         project.setEmployee(employee);
-        Company company = getRemoteApiCompany(companyId).orElseThrow(RemoteCompanyApiException::new);
+        Company company = getRemoteApiCompany(companyId);
         project.setCompanyId(companyId);
         project.setCompany(company);
     }
@@ -152,7 +154,7 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
 
     @Override
     public List<Project> loadProjectsAssignedToEmployee(String employeeId) throws RemoteEmployeeApiException {
-        Employee employee = getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
+        Employee employee = getRemoteEmployeeAPI(employeeId);
         List<Project> projects = outputProjectService.loadProjectsAssignedToEmployee(employee.getEmployeeId());
         projects.forEach(project -> {
             try {
@@ -167,7 +169,7 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
 
     @Override
     public List<Project> loadProjectsOfCompanyC(String companyId) throws RemoteCompanyApiException {
-        Company company = getRemoteApiCompany(companyId).orElseThrow(RemoteCompanyApiException::new);
+        Company company = getRemoteApiCompany(companyId);
         List<Project> projects=  outputProjectService.loadProjectsOfCompanyC(company.getCompanyId());
         projects.forEach(project -> {
             try {
@@ -194,15 +196,13 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     }
 
     @Override
-    public Optional<Company> getRemoteApiCompany(String companyId) throws RemoteCompanyApiException {
-        Company company = outputCompanyAPIService.getRemoteCompanyAPI(companyId).orElseThrow(RemoteCompanyApiException::new);
-        return Optional.of(company);
+    public Company getRemoteApiCompany(String companyId) throws RemoteCompanyApiException {
+       return outputCompanyAPIService.getRemoteCompanyAPI(companyId);
     }
 
     @Override
-    public Optional<Employee> getRemoteEmployeeAPI(String employeeId) throws RemoteEmployeeApiException {
-        Employee employee = outputEmployeeAPIService.getRemoteEmployeeAPI(employeeId).orElseThrow(RemoteEmployeeApiException::new);
-        return Optional.of(employee);
+    public Employee getRemoteEmployeeAPI(String employeeId) throws RemoteEmployeeApiException {
+       return outputEmployeeAPIService.getRemoteEmployeeAPI(employeeId);
     }
 
 }

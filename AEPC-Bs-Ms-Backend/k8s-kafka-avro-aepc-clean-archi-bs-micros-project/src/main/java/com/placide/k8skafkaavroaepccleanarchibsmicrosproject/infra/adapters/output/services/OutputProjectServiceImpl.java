@@ -5,13 +5,9 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.compan
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.employee.Employee;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.project.Project;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.ProjectNotFoundException;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.RemoteCompanyApiException;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.RemoteEmployeeApiException;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.output.OutputProjectService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.output.OutputRemoteApiCompanyService;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.ports.output.OutputRemoteApiEmployeeService;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.models.CompanyModel;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.models.EmployeeModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.proxies.CompanyServiceProxy;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.proxies.EmployeeServiceProxy;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.output.mappers.Mapper;
@@ -116,14 +112,12 @@ public class OutputProjectServiceImpl implements OutputProjectService, OutputRem
     }
 
     @Override
-    public Optional<Company> getRemoteCompanyAPI(String companyId) throws RemoteCompanyApiException {
-        CompanyModel model = companyServiceProxy.loadRemoteApiGetCompany(companyId).orElseThrow(RemoteCompanyApiException::new);
-        return Optional.of(Mapper.fromTo(model));
+    public Company getRemoteCompanyAPI(String companyId) {
+        return Mapper.fromTo(companyServiceProxy.loadRemoteApiGetCompany(companyId));
     }
     @Override
-    public Optional<Employee> getRemoteEmployeeAPI(String employeeId) throws RemoteEmployeeApiException {
-        EmployeeModel model =employeeServiceProxy.loadRemoteApiGetEmployee(employeeId).orElseThrow(RemoteEmployeeApiException::new);
-        return Optional.of(Mapper.fromTo(model));
+    public Employee getRemoteEmployeeAPI(String employeeId) {
+        return Mapper.fromTo(employeeServiceProxy.loadRemoteApiGetEmployee(employeeId));
     }
 
     private List<Project> mapToBean(List<ProjectModel> models){

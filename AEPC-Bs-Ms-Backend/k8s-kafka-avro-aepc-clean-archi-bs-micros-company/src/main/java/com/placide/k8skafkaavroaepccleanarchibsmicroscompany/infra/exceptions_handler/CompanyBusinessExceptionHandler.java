@@ -25,9 +25,8 @@ public class CompanyBusinessExceptionHandler {
         return new ResponseEntity<>(ExceptionMessage.COMPANY_TYPE_UNKNOWN_EXCEPTION.getMessage(), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(value = RemoteApiAddressNotLoadedException.class)
-    public ResponseEntity<Object> handleRemoteApiAddressNotLoadedException(){
-        return new ResponseEntity<>(ExceptionMessage.REMOTE_ADDRESS_API_EXCEPTION
-                .getMessage(),
+    public ResponseEntity<Object> handleRemoteApiAddressNotLoadedException(RemoteApiAddressNotLoadedException exception){
+        return new ResponseEntity<>(exception.getMessage(),
                 HttpStatus.NOT_ACCEPTABLE);
     }
 }

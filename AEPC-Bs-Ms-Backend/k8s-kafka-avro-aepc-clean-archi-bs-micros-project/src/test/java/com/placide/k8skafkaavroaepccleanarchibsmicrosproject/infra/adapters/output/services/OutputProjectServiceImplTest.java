@@ -5,8 +5,6 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.compan
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.employee.Employee;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.project.Project;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.ProjectNotFoundException;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.RemoteCompanyApiException;
-import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.RemoteEmployeeApiException;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.models.CompanyModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.models.EmployeeModel;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.input.feignclients.proxies.CompanyServiceProxy;
@@ -25,7 +23,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -228,12 +225,12 @@ class OutputProjectServiceImplTest {
     }
 
     @Test
-    void getRemoteCompanyAPI() throws RemoteCompanyApiException {
+    void getRemoteCompanyAPI() {
         //PREPARE
         CompanyModel cModel = Mapper.fromTo(company);
         //EXECUTE
-        Mockito.when(companyServiceProxy.loadRemoteApiGetCompany(COMPANY_ID)).thenReturn(Optional.of(cModel));
-        Company cBean = underTest.getRemoteCompanyAPI(COMPANY_ID).orElseThrow(RemoteCompanyApiException::new);
+        Mockito.when(companyServiceProxy.loadRemoteApiGetCompany(COMPANY_ID)).thenReturn(cModel);
+        Company cBean = underTest.getRemoteCompanyAPI(COMPANY_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",
                 () -> Mockito.verify(companyServiceProxy).loadRemoteApiGetCompany(COMPANY_ID),
@@ -241,12 +238,12 @@ class OutputProjectServiceImplTest {
     }
 
     @Test
-    void getRemoteEmployeeAPI() throws RemoteEmployeeApiException {
+    void getRemoteEmployeeAPI() {
         //PREPARE
         EmployeeModel eModel = Mapper.fromTo(employee);
         //EXECUTE
-        Mockito.when(employeeServiceProxy.loadRemoteApiGetEmployee(EMPLOYEE_ID)).thenReturn(Optional.of(eModel));
-        Employee eBean = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID).orElseThrow(RemoteEmployeeApiException::new);
+        Mockito.when(employeeServiceProxy.loadRemoteApiGetEmployee(EMPLOYEE_ID)).thenReturn(eModel);
+        Employee eBean = underTest.getRemoteEmployeeAPI(EMPLOYEE_ID);
         //VERIFY
         Assertions.assertAll("gpe of assertions",
                 () -> Mockito.verify(employeeServiceProxy).loadRemoteApiGetEmployee(EMPLOYEE_ID),

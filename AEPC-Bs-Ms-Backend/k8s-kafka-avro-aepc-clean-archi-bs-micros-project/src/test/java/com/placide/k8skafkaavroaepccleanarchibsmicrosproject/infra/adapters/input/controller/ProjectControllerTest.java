@@ -61,8 +61,8 @@ class ProjectControllerTest {
         bean.setCompany(company);
         bean.setEmployee(employee);
         //EXECUTE
-        Mockito.when(inputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(inputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(company);
         Mockito.when(inputProjectService.produceKafkaEventProjectCreate(Mockito.any(ProjectDto.class))).thenReturn(bean);
         List<String> consumedAndSaved = underTest.produceConsumeAndSave(dto);
         Mockito.when(inputProjectService.createProject(Mockito.any(Project.class))).thenReturn(bean);
@@ -187,8 +187,8 @@ class ProjectControllerTest {
         //EXECUTE
         Mockito.when(inputProjectService.getProject(PROJECT_ID)).thenReturn(Optional.of(bean));
         Project actual = underTest.getProject(PROJECT_ID);
-        Mockito.when(inputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
-        Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(Optional.of(company));
+        Mockito.when(inputRemoteAPIEmployeeService.getRemoteEmployeeAPI(EMPLOYEE_ID)).thenReturn(employee);
+        Mockito.when(inputRemoteAPICompanyService.getRemoteApiCompany(COMPANY_ID)).thenReturn(company);
         Mockito.when(inputProjectService.produceKafkaEventProjectUpdate(dto,PROJECT_ID)).thenReturn(bean);
         Mockito.when(inputProjectService.updateProject(actual)).thenReturn(new Project());
         List<String> consumedAndSaved = underTest.update(PROJECT_ID, dto);

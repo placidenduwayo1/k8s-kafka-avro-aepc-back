@@ -102,7 +102,7 @@ class OutputEmployeeServiceImplTest {
         AddressModel addressModel = AddressMapper.toModel(address);
         List<EmployeeModel> employeeModels = List.of(EmployeeMapper.toModel(employee));
         //EXECUTE
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(addressModel);
         Mockito.when(repository.findByAddressId(addressModel.getAddressId())).thenReturn(employeeModels);
         List<Employee> employees = underTest.loadEmployeesByRemoteAddress(ADDRESS_ID);
         //VERIFY
@@ -168,7 +168,7 @@ class OutputEmployeeServiceImplTest {
         //EXECUTE
         Mockito.when(repository.findById(employeeId)).thenReturn(Optional.of(employeeModel));
         Employee obtained = underTest.getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(addressModel);
         String msg = underTest.deleteEmployee(employeeId);
 
         //VERIFY
@@ -217,8 +217,8 @@ class OutputEmployeeServiceImplTest {
         //PREPARE
         AddressModel model = AddressMapper.toModel(address);
         //EXECUTE
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(Optional.of(model));
-        Optional<Address> obtained = underTest.getRemoteAddressById(ADDRESS_ID);
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(ADDRESS_ID)).thenReturn(model);
+       Address obtained = underTest.getRemoteAddressById(ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("grp of assertions",
                 ()->Mockito.verify(addressServiceProxy).loadRemoteApiGetAddressById(ADDRESS_ID),

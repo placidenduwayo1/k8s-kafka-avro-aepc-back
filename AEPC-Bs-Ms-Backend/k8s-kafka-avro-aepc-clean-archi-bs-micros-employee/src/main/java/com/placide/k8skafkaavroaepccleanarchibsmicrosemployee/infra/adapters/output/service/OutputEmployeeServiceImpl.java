@@ -68,7 +68,7 @@ public class OutputEmployeeServiceImpl implements  OutputEmployeeService, Output
 
     @Override
     public List<Employee> loadEmployeesByRemoteAddress(String addressId) throws RemoteApiAddressNotLoadedException {
-        AddressModel model= addressProxy.loadRemoteApiGetAddressById(addressId).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        AddressModel model= addressProxy.loadRemoteApiGetAddressById(addressId);
         List<EmployeeModel> models = repository.findByAddressId(model.getAddressId());
         return employeeModelToBean(models);
     }
@@ -119,9 +119,9 @@ public class OutputEmployeeServiceImpl implements  OutputEmployeeService, Output
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
-        return Optional.of(AddressMapper.toBean(addressProxy.loadRemoteApiGetAddressById(addressId)
-                .orElseThrow(RemoteApiAddressNotLoadedException::new)));
+    public Address getRemoteAddressById(String addressId) throws RemoteApiAddressNotLoadedException {
+        return AddressMapper.toBean(addressProxy.loadRemoteApiGetAddressById(addressId));
+
     }
 
     @Override

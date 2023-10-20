@@ -5,22 +5,21 @@ import com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.infra.adapters.inp
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.placide.k8skafkaavroaepccleanarchibsmicrosemployee.domain.exceptions
         .ExceptionsMsg.ADDRESS_API_UNREACHABLE;
 @Component
 public class AddressServiceProxyFallback implements AddressServiceProxy {
     @Override
-    public Optional<AddressModel> loadRemoteApiGetAddressById(String addressId) {
-       return Optional.of(AddressModel.builder()
+    public AddressModel loadRemoteApiGetAddressById(String addressId) {
+       return AddressModel.builder()
                 .addressId(ADDRESS_API_UNREACHABLE.getMessage())
                 .num(0)
                 .street(ADDRESS_API_UNREACHABLE.getMessage())
                 .poBox(0)
                 .city(ADDRESS_API_UNREACHABLE.getMessage())
                 .country(ADDRESS_API_UNREACHABLE.getMessage())
-                .build());
+                .build();
     }
     @Override
     public List<AddressModel> loadRemoteAddressIpiGetAllAddresses() {

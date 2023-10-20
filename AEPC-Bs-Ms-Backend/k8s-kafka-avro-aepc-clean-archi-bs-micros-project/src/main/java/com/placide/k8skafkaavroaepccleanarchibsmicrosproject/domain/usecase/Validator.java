@@ -2,10 +2,8 @@ package com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.usecase;
 
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.project.Priority;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.beans.project.State;
+import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.ExceptionMsg;
 import com.placide.k8skafkaavroaepccleanarchibsmicrosproject.infra.adapters.output.models.ProjectDto;
-
-import static com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.Msg.REMOTE_COMPANY_API_UNREACHABLE;
-import static com.placide.k8skafkaavroaepccleanarchibsmicrosproject.domain.exceptions.Msg.REMOTE_EMPLOYEE_API_UNREACHABLE;
 
 public class Validator {
     private Validator(){}
@@ -36,10 +34,10 @@ public class Validator {
         return valid;
     }
     public static boolean remoteEmployeeApiUnreachable(String employeeId){
-        return employeeId.strip().equals(REMOTE_EMPLOYEE_API_UNREACHABLE);
+        return employeeId.strip().equals(ExceptionMsg.REMOTE_EMPLOYEE_API_EXCEPTION.getMessage());
     }
     public static boolean remoteCompanyApiUnreachable(String companyId){
-        return companyId.strip().equals(REMOTE_COMPANY_API_UNREACHABLE);
+        return companyId.strip().equals(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage());
     }
     public static void format(ProjectDto dto){
         dto.setName(dto.getName().strip().toUpperCase());

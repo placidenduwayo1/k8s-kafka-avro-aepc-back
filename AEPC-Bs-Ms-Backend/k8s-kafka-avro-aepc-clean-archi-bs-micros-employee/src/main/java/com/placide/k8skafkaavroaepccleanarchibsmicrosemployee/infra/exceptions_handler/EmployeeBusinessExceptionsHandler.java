@@ -28,9 +28,8 @@ public class EmployeeBusinessExceptionsHandler {
     }
 
     @ExceptionHandler(value = RemoteApiAddressNotLoadedException.class)
-    public ResponseEntity<Object> handleRemoteApiAddressNotLoadedException(){
-        return new ResponseEntity<>(ExceptionsMsg.REMOTE_ADDRESS_API_EXCEPTION
-                .getMessage(),
+    public ResponseEntity<Object> handleRemoteApiAddressNotLoadedException(RemoteApiAddressNotLoadedException exception){
+        return new ResponseEntity<>(exception.getMessage(),
                 HttpStatus.NOT_ACCEPTABLE);
     }
     @ExceptionHandler(value = EmployeeStateInvalidException.class)
@@ -40,9 +39,8 @@ public class EmployeeBusinessExceptionsHandler {
                 HttpStatus.NOT_ACCEPTABLE);
     }
     @ExceptionHandler(value = EmployeeTypeInvalidException.class)
-    public ResponseEntity<Object> handleEmployeeTypeInvalidException(){
-        return new ResponseEntity<>(ExceptionsMsg.EMPLOYEE_UNKNOWN_TYPE_EXCEPTION
-                .getMessage(),
+    public ResponseEntity<Object> handleEmployeeTypeInvalidException(EmployeeTypeInvalidException exception){
+        return new ResponseEntity<>(exception.getMessage(),
                 HttpStatus.NOT_ACCEPTABLE);
     }
 }

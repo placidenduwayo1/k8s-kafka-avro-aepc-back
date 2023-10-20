@@ -66,7 +66,7 @@ class UseCaseTest {
             EmployeeStateInvalidException, RemoteApiAddressNotLoadedException, EmployeeAlreadyExistsException {
         //PREPARE
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(kafkaProducerMock.produceKafkaEventEmployeeCreate(Mockito.any(EmployeeAvro.class))).thenReturn(avro);
         Employee actual = underTest.produceKafkaEventEmployeeCreate(dto);
         //VERIFY
@@ -92,7 +92,7 @@ class UseCaseTest {
     void createEmployee() throws RemoteApiAddressNotLoadedException {
         //PREPARE
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(employeeServiceMock.saveEmployee(bean)).thenReturn(bean);
         Employee actual = underTest.createEmployee(bean);
         //VERIFY
@@ -110,7 +110,7 @@ class UseCaseTest {
         //PREPARE
         String employeeId = "uuid";
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(employeeServiceMock.getEmployeeById(employeeId)).thenReturn(Optional.of(bean));
         Employee actual = underTest.getEmployeeById(employeeId).orElseThrow(EmployeeNotFoundException::new);
         Mockito.when(kafkaProducerMock.produceKafkaEventEmployeeDelete(avro)).thenReturn(avro);
@@ -132,7 +132,7 @@ class UseCaseTest {
         //PREPARE
         String id = "uuid";
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(employeeServiceMock.getEmployeeById(id)).thenReturn(Optional.of(bean));
         Employee employee = underTest.getEmployeeById(id).orElseThrow(EmployeeNotFoundException::new);
         Mockito.when(employeeServiceMock.deleteEmployee(employee.getEmployeeId())).thenReturn("");
@@ -152,7 +152,7 @@ class UseCaseTest {
         //PREPARE
         String employeeId = "uuid";
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(employeeServiceMock.getEmployeeById(employeeId)).thenReturn(Optional.of(bean));
         Mockito.when(kafkaProducerMock.produceKafkaEventEmployeeEdit(avro)).thenReturn(avro);
         Employee actual = underTest.produceKafkaEventEmployeeEdit(dto, employeeId);
@@ -176,7 +176,7 @@ class UseCaseTest {
         Employee updated = bean;
         updated.setAddress(new Address("address-Paris",44,"Rue Notre Dame des Victoires",74002,"Paris","France"));
         //EXECUTE
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         Mockito.when(employeeServiceMock.editEmployee(bean)).thenReturn(updated);
         Employee actual = underTest.editEmployee(bean);
         //VERIFY
@@ -193,7 +193,7 @@ class UseCaseTest {
         List<Employee> beans = List.of(bean,bean,bean);
         //EXECUTE
         Mockito.when(employeeServiceMock.loadEmployeesByRemoteAddress(ADDRESS_ID)).thenReturn(beans);
-        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(remoteAddress));
+        Mockito.when(addressProxyMock.getRemoteAddressById(ADDRESS_ID)).thenReturn(remoteAddress);
         List<Employee> actuals = underTest.loadEmployeesByRemoteAddress(ADDRESS_ID);
         //VERIFY
         Assertions.assertAll("assertions",()->{

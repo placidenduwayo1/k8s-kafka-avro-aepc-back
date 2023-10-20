@@ -38,8 +38,7 @@ public class EmployeeController {
     @GetMapping(value = "/employees/addresses/id/{addressId}")
     public Address getRemoteAddress(@PathVariable(name = "addressId") String addressId) throws
             RemoteApiAddressNotLoadedException{
-        return remoteInputAddressService.getRemoteAddressById(addressId)
-                .orElseThrow(RemoteApiAddressNotLoadedException::new);
+        return remoteInputAddressService.getRemoteAddressById(addressId);
     }
     @GetMapping(value = "/employees/addresses")
     public List<Address> getRemoteAddresses(){

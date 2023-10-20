@@ -86,7 +86,7 @@ class OutputKafkaProducerEmployeeServiceImplTest {
         Message<?> message = buildKafkaMessage(employeeAvro, TOPICS.get(1));
         AddressModel addressModel = AddressMapper.toModel(address);
         //EXECUTE
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(employee.getAddressId())).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(employee.getAddressId())).thenReturn(addressModel);
         EmployeeAvro actual = underTest.produceKafkaEventEmployeeDelete(employeeAvro);
         employeeAvroKafkaTemplate.send(message);
         //VERIFY
@@ -111,7 +111,7 @@ class OutputKafkaProducerEmployeeServiceImplTest {
         EmployeeModel employeeModel = EmployeeMapper.toModel(bean);
         //EXECUTE
         Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employeeModel));
-        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(employee.getAddressId())).thenReturn(Optional.of(addressModel));
+        Mockito.when(addressServiceProxy.loadRemoteApiGetAddressById(employee.getAddressId())).thenReturn(addressModel);
         EmployeeAvro actual = underTest.produceKafkaEventEmployeeEdit(avro);
         employeeAvroKafkaTemplate.send(message);
         //VERIFY
