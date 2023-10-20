@@ -105,7 +105,7 @@ public class OutputCompanyServiceImpl implements OutputCompanyService, OutputRem
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId) {
-        return Optional.of(AddressMapper.toBean(addressServiceProxy.loadRemoteApiGetAddressById(addressId)));
+    public Address getRemoteAddressById(String addressId) {
+        return AddressMapper.toBean(addressServiceProxy.loadRemoteApiGetAddressById(addressId));
     }
 }

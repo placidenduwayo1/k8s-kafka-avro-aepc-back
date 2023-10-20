@@ -64,7 +64,7 @@ class UseCaseTest {
         bean.setAddress(address);
         CompanyAvro avro = CompanyMapper.fromBeanToAvro(bean);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(kafkaProducerService.produceKafkaEventCompanyCreate(Mockito.any(CompanyAvro.class))).thenReturn(avro);
         Company actual = underTest.produceKafkaEventCompanyCreate(dto);
         //VERIFY
@@ -79,11 +79,11 @@ class UseCaseTest {
     }
 
     @Test
-    void createCompany() throws RemoteApiAddressNotLoadedException {
+    void createCompany() {
         //PREPARE
         Company bean = CompanyMapper.fromDtoToBean(dto);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.saveCompany(Mockito.any(Company.class))).thenReturn(bean);
         Company actual = underTest.createCompany(bean);
         //VERIFY
@@ -95,11 +95,11 @@ class UseCaseTest {
     }
 
     @Test
-    void getCompanyById() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    void getCompanyById() throws CompanyNotFoundException {
         //PREPARE
         Company bean = CompanyMapper.fromDtoToBean(dto);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.getCompanyById(COMPANY_ID)).thenReturn(Optional.of(bean));
         Company actual = underTest.getCompanyById(COMPANY_ID).orElseThrow(CompanyNotFoundException::new);
         //VERIFY
@@ -139,7 +139,7 @@ class UseCaseTest {
     }
 
     @Test
-    void produceKafkaEventCompanyDelete() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    void produceKafkaEventCompanyDelete() throws CompanyNotFoundException {
         //PREPARE
         Company bean = CompanyMapper.fromDtoToBean(dto);
         bean.setCompanyId(UUID.randomUUID().toString());
@@ -148,7 +148,7 @@ class UseCaseTest {
         bean.setAddress(address);
         CompanyAvro avro = CompanyMapper.fromBeanToAvro(bean);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.getCompanyById(COMPANY_ID)).thenReturn(Optional.of(bean));
         Company actual1 = underTest.getCompanyById(COMPANY_ID).orElseThrow(CompanyNotFoundException::new);
         Mockito.when(kafkaProducerService.produceKafkaEventCompanyDelete(avro)).thenReturn(avro);
@@ -163,11 +163,11 @@ class UseCaseTest {
     }
 
     @Test
-    void deleteCompany() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    void deleteCompany() throws CompanyNotFoundException {
         //PREPARE
         Company bean = CompanyMapper.fromDtoToBean(dto);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.getCompanyById(COMPANY_ID)).thenReturn(Optional.of(bean));
         Company actual = underTest.getCompanyById(COMPANY_ID).orElseThrow(CompanyNotFoundException::new);
         Mockito.when(companyService.deleteCompany(actual.getCompanyId())).thenReturn("");
@@ -193,7 +193,7 @@ class UseCaseTest {
         bean.setAddress(address);
         CompanyAvro avro = CompanyMapper.fromBeanToAvro(bean);
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.getCompanyById(companyId)).thenReturn(Optional.of(bean));
         Mockito.when(kafkaProducerService.produceKafkaEventCompanyEdit(Mockito.any(CompanyAvro.class)))
                 .thenReturn(avro);
@@ -209,13 +209,13 @@ class UseCaseTest {
     }
 
     @Test
-    void editCompany() throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    void editCompany() throws CompanyNotFoundException {
         //PREPARE
         Company bean = CompanyMapper.fromDtoToBean(dto);
         bean.setCompanyId(UUID.randomUUID().toString());
         bean.setConnectedDate(Timestamp.from(Instant.now()).toString());
         //EXECUTE
-        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(Optional.of(address));
+        Mockito.when(remoteAddressService.getRemoteAddressById(ADDRESS_ID)).thenReturn(address);
         Mockito.when(companyService.getCompanyById(COMPANY_ID)).thenReturn(Optional.of(bean));
         Company actual1 = underTest.getCompanyById(COMPANY_ID).orElseThrow(CompanyNotFoundException::new);
         Mockito.when(companyService.editCompany(bean)).thenReturn(bean);

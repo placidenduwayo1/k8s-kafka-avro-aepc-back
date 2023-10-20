@@ -60,7 +60,7 @@ public class CompanyController {
                 consumed, id), HttpStatus.OK);
     }
     @GetMapping(value = "/companies/addresses/{addressId}")
-    public Optional<Address> getRemoteAddress(@PathVariable(name = "addressId") String addressId){
+    public Address getRemoteAddress(@PathVariable(name = "addressId") String addressId){
         return remoteAddressService.getRemoteAddressById(addressId);
     }
 }

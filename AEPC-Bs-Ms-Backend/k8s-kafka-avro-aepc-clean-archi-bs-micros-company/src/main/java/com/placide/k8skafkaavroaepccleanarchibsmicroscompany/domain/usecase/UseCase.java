@@ -36,9 +36,10 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
         else if(!Validator.checkTypeExists(dto.getType())){
             throw new CompanyTypeInvalidException();
         }
-        Address address = getRemoteAddressById(dto.getAddressId()).orElseThrow(RemoteApiAddressNotLoadedException::new);
+        Address address = getRemoteAddressById(dto.getAddressId());
+
         if (Validator.remoteAddressApiUnreachable(address.getAddressId())) {
-            throw new RemoteApiAddressNotLoadedException();
+            throw new RemoteApiAddressNotLoadedException(address.toString());
         }
     }
 
@@ -48,8 +49,8 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
         }
     }
 
-    private void setCompanyDependency(Company company, String addressId) throws RemoteApiAddressNotLoadedException {
-        Address address = getRemoteAddressById(addressId).orElseThrow(RemoteApiAddressNotLoadedException::new);
+    private void setCompanyDependency(Company company, String addressId){
+        Address address = getRemoteAddressById(addressId);
         company.setAddressId(addressId);
         company.setAddress(address);
     }
@@ -68,14 +69,14 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
     }
 
     @Override
-    public Company createCompany(Company company) throws RemoteApiAddressNotLoadedException {
+    public Company createCompany(Company company) {
         Company saved = companyService.saveCompany(company);
         setCompanyDependency(saved, saved.getAddressId());
         return saved;
     }
 
     @Override
-    public Optional<Company> getCompanyById(String id) throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    public Optional<Company> getCompanyById(String id) throws CompanyNotFoundException {
        Company company = companyService.getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
        setCompanyDependency(company, company.getAddressId());
        return Optional.of(company);
@@ -84,33 +85,20 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
     @Override
     public List<Company> loadCompanyByInfo(String name, String agency, String type) {
         List<Company>  companies = companyService.loadCompanyByInfo(name,agency,type);
-        companies.forEach(company -> {
-            try {
-                setCompanyDependency(company,company.getAddressId());
-            } catch (RemoteApiAddressNotLoadedException e) {
-                e.getMessage();
-            }
-        });
-
+        companies.forEach(company -> setCompanyDependency(company,company.getAddressId()));
         return companies;
     }
 
     @Override
     public List<Company> loadAllCompanies() {
         List<Company> companies = companyService.loadAllCompanies();
-        companies.forEach(company -> {
-            try {
-                setCompanyDependency(company,company.getAddressId());
-            } catch (RemoteApiAddressNotLoadedException e) {
-                e.getMessage();
-            }
-        });
+        companies.forEach(company -> setCompanyDependency(company,company.getAddressId()));
 
         return companies;
     }
 
     @Override
-    public Company produceKafkaEventCompanyDelete(String id) throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    public Company produceKafkaEventCompanyDelete(String id) throws CompanyNotFoundException {
         Company company = getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
         setCompanyDependency(company, company.getAddressId());
         CompanyAvro companyAvro = CompanyMapper.fromBeanToAvro(company);
@@ -118,7 +106,7 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
     }
 
     @Override
-    public String deleteCompany(String id) throws CompanyNotFoundException, RemoteApiAddressNotLoadedException {
+    public String deleteCompany(String id) throws CompanyNotFoundException {
        Company company = getCompanyById(id).orElseThrow(CompanyNotFoundException::new);
        companyService.deleteCompany(company.getCompanyId());
         return "Company <"+company+"> successfully deleted";
@@ -139,14 +127,14 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
     }
 
     @Override
-    public Company editCompany(Company payload) throws RemoteApiAddressNotLoadedException {
+    public Company editCompany(Company payload) {
         Company company = companyService.editCompany(payload);
         setCompanyDependency(company, company.getAddressId());
         return company;
     }
 
     @Override
-    public Optional<Address> getRemoteAddressById(String addressId)  {
+    public Address getRemoteAddressById(String addressId)  {
         return outputRemoteAddressService.getRemoteAddressById(addressId);
     }
 }
