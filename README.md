@@ -44,8 +44,8 @@ mysql database docker image for peristing data from business microservices
   - run docker images of microservices of application in docker containers.
  
     ### ci/cd summary
-![my-ci-cd-flow](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/b8e87f11-5a79-40c4-a132-9327ae0639dc)
-
+![my-ci-cd-flow](https://github.com/placidenduwayo1/k8s-kafka-avro-aepc-back/assets/124048212/84cf6f21-f87c-4cc7-abb6-172f26f075b4)
+    
  ### deployed microservices in docker images
  - kafka infrastructure:
   - zookeeper (one instance) for managing kafka brokers
