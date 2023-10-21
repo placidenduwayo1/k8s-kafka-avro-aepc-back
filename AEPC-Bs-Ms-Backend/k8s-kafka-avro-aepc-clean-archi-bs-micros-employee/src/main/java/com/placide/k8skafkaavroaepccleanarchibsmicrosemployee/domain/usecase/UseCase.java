@@ -133,6 +133,9 @@ public class UseCase implements InputEmployeeService, RemoteInputAddressService 
     @Override
     public List<Employee> loadEmployeesByRemoteAddress(String addressId) throws RemoteApiAddressNotLoadedException {
         Address address = outputRemoteAddressService.getRemoteAddressById(addressId);
+        if(Validator.remoteAddressApiUnreachable(addressId)){
+            throw new RemoteApiAddressNotLoadedException(address.toString());
+        }
         List<Employee> employees = outputEmployeeService.loadEmployeesByRemoteAddress(address.getAddressId());
         employees.forEach(employee -> {
             try {
