@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-db-secret
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
   labels:
     app: mysql-db-secret
 type: Opaque
@@ -29,7 +29,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pvc
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
   labels:
     app: mysql-pvc
 spec:
@@ -47,7 +47,7 @@ metadata:
   name: mysql-ms-dbs
   labels:
     app: mysql-ms-dbs
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   replicas: 1
   selector:
@@ -88,7 +88,7 @@ metadata:
   name: mysql-ms-dbs
   labels:
     app: mysql-ms-dbs
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   selector:
     app: mysql-ms-dbs

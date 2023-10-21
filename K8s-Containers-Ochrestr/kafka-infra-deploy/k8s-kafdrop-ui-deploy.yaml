@@ -4,7 +4,7 @@ metadata:
   name: kafdrop-ui
   labels:
     app: kafdrop-ui
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   replicas: 1
   selector:
@@ -26,7 +26,7 @@ spec:
             - name: KAFKA_BROKERCONNECT
               valueFrom:
                 configMapKeyRef:
-                  name: env-variables-cm
+                  name: kafka-infra-env-variables-cm
                   key: kafka_bootstrap_servers
       restartPolicy: Always
 ---
@@ -36,7 +36,7 @@ metadata:
   name: kafdrop-ui
   labels:
     app: kafdrop-ui
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   selector:
     app: kafdrop-ui

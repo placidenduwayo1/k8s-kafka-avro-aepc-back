@@ -4,7 +4,7 @@ metadata:
   name: microservices-config-service
   labels:
     app: microservices-config-service
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   replicas: 1
   selector:
@@ -30,7 +30,7 @@ metadata:
   name: microservices-config-service
   labels:
     app: microservices-config-service
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   selector:
     app: microservices-config-service

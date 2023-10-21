@@ -4,7 +4,7 @@ metadata:
   name: gateway-service
   labels:
     app: gateway-service
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   replicas: 1
   selector:
@@ -30,7 +30,7 @@ metadata:
   name: gateway-service
   labels:
     app: gateway-service
-  namespace: microservices-ns
+  namespace: kafka-db-ms-ns
 spec:
   selector:
     app: gateway-service
