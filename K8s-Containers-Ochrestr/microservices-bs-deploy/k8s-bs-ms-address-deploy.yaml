@@ -16,6 +16,39 @@ spec:
       labels:
         app: k8s-kafka-avro-aepc-bs-ms-address
     spec:
+      initContainers:
+        - name: check-configserver-ready
+          image: busybox
+          command: [ '/bin/sh' ]
+          args: [ '-c', 'until nc -z microservices-config-service 8180; do echo waiting for ms config server; sleep 5; done;' ]
+        - name: check-db-ready
+          image: busybox
+          command:
+            - '/bin/sh'
+          args:
+            - '-c'
+            - 'until nc -z mysql-ms-dbs 3306; do echo waiting database service ready; sleep 5; done;'
+        - name: check-kafka-broker1-ready
+          image: busybox
+          command:
+            - '/bin/sh'
+          args:
+            - '-c'
+            - 'until nc -z kafka-broker-1 9092; do echo waiting for kafka broker1 ready; sleep 5; done;'
+        - name: check-kafka-broker2-ready
+          image: busybox
+          command:
+            - '/bin/sh'
+          args:
+            - '-c'
+            - 'until nc -z kafka-broker-2 9093; do echo waiting for kafka broker2 ready; sleep 5; done;'
+        - name: check-kafka-broker3-ready
+          image: busybox
+          command:
+            - '/bin/sh'
+          args:
+            - '-c'
+            - 'until nc -z kafka-broker-3 9094; do echo waiting for kafka broker3 ready; sleep 5; done;'
       containers:
         - name: k8s-kafka-avro-aepc-bs-ms-address
           image: placidenduwayo1/k8s-kafka-avro-aepc-bs-ms-address:latest

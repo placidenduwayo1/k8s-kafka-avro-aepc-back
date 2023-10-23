@@ -16,6 +16,19 @@ spec:
       labels:
         app: kafdrop-ui
     spec:
+      initContainers:
+        - name: check-kafka-broker-1-ready
+          image: busybox
+          command: [ '/bin/sh' ]
+          args: [ '-c','until nc -z kafka-broker-1 9092; do echo waiting for kafka-broker-1 ready; sleep 5; done;' ]
+        - name: check-kafka-broker-2-ready
+          image: busybox
+          command: [ '/bin/sh' ]
+          args: [ '-c', 'until nc -z kafka-broker-2 9093; do echo waiting for kafka-broker-2 ready; sleep 5; done;' ]
+        - name: check-kafka-broker-3-ready
+          image: busybox
+          command: [ '/bin/sh' ]
+          args: [ '-c', 'until nc -z kafka-broker-3 9094; do echo waiting for kafka-broker-3 ready; sleep 5; done;' ]
       containers:
         - name: kafdrop-ui
           image: obsidiandynamics/kafdrop

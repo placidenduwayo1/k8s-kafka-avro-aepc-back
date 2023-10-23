@@ -16,6 +16,11 @@ spec:
       labels:
         app: kafka-broker-2
     spec:
+      initContainers:
+        - name: check-zookeeper-ready
+          image: busybox
+          command: [ '/bin/sh' ]
+          args: [ '-c', 'until nc -z zookeeper 2181; do echo waiting for zookeeper service ready; sleep 5; done;']
       hostname: kafka-broker-2
       containers:
         - name: kafka-broker-2
