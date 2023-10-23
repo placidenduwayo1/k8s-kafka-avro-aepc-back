@@ -13,6 +13,7 @@ public class CompanyServiceFallback implements CompanyServiceProxy {
                 .companyId(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage())
                 .name(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage())
                 .agency(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage())
+                .type(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage())
                 .connectedDate(ExceptionMsg.REMOTE_COMPANY_API_EXCEPTION.getMessage())
                 .build();
     }
