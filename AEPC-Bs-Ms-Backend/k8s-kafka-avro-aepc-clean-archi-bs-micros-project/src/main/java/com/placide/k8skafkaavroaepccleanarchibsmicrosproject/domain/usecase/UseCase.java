@@ -155,8 +155,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     @Override
     public List<Project> loadProjectsAssignedToEmployee(String employeeId) throws RemoteEmployeeApiException {
         Employee employee = getRemoteEmployeeAPI(employeeId);
-        if(employee==null){
-            throw new RemoteEmployeeApiException("Remote employee unreachable");
+        if(Validator.remoteEmployeeApiUnreachable(employee.getEmployeeId())){
+            throw new RemoteEmployeeApiException(employee.toString());
         }
         List<Project> projects = outputProjectService.loadProjectsAssignedToEmployee(employee.getEmployeeId());
         projects.forEach(project -> {
@@ -173,8 +173,8 @@ public class UseCase implements InputProjectService, InputRemoteApiEmployeeServi
     @Override
     public List<Project> loadProjectsOfCompanyC(String companyId) throws RemoteCompanyApiException {
         Company company = getRemoteApiCompany(companyId);
-        if(company==null){
-            throw new RemoteCompanyApiException("Remote company unreachable");
+        if(Validator.remoteCompanyApiUnreachable(company.getCompanyId())){
+            throw new RemoteCompanyApiException(company.toString());
         }
         List<Project> projects=  outputProjectService.loadProjectsOfCompanyC(company.getCompanyId());
         projects.forEach(project -> {
