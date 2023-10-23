@@ -122,11 +122,11 @@ class AddressControllerTest {
         //EXECUTE
         Mockito.when(inputAddressServiceMock.produceAndConsumeAddressEdit(addressDto,addressId)).thenReturn(consumedAddress);
         Mockito.when(inputAddressServiceMock.editAddress(consumedAddress)).thenReturn(expectedAddress);
-        ResponseEntity<Object> response = underTest.editAddress(addressDto,addressId);
+        List<String> response = underTest.editAddress(addressDto,addressId);
 
         //VERIFY
         Assertions.assertAll("props",()->{
-            Assertions.assertEquals(200,response.getStatusCode().value());
+            Assertions.assertEquals(2,response.size());
             Mockito.verify(inputAddressServiceMock, Mockito.atLeast(1)).editAddress(consumedAddress);
         });
     }

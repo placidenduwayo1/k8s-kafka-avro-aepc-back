@@ -64,15 +64,13 @@ public class AddressController {
     }
 
     @PutMapping(value = "/addresses/id/{addressId}")
-    public ResponseEntity<Object> editAddress(@RequestBody AddressDto addressDto,
+    public List<String> editAddress(@RequestBody AddressDto addressDto,
                                               @PathVariable(name = "addressId") String addressId) throws
             AddressNotFoundException {
 
         Address produceAndConsumeAddress = inputAddressService.produceAndConsumeAddressEdit(addressDto, addressId);
         Address savedAddress = inputAddressService.editAddress(produceAndConsumeAddress);
 
-        return new ResponseEntity<>(String
-                .format("%s to update is sent and consumed;%n %s is updated in db", produceAndConsumeAddress, savedAddress),
-                HttpStatus.OK);
+        return List.of("produced consumed:"+produceAndConsumeAddress,"saved:"+savedAddress);
     }
 }
