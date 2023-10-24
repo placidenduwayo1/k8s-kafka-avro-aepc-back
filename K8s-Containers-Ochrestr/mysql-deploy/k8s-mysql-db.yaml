@@ -67,6 +67,23 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
+              name: mysql-port
+              hostPort: 3306
+          readinessProbe:
+            tcpSocket:
+              port: mysql-port
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: mysql-port
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: mysql-port
+            failureThreshold: 30
+            periodSeconds: 15
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

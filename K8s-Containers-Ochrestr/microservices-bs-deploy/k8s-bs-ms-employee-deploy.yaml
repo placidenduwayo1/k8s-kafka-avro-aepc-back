@@ -55,13 +55,32 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8582
+              name: employee-port
+              hostPort: 8582
+          readinessProbe:
+            httpGet:
+              port: employee-port
+              path: /employees
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: employee-port
+              path: /employees
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              port: employee-port
+              path: /employees
+            failureThreshold: 30
+            periodSeconds: 10
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
                   name: kafka-infra-env-variables-cm
                   key: kafka_bootstrap_servers
-      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service

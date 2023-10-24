@@ -22,7 +22,23 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8180
-      restartPolicy: Always
+              name: conf-svc-port
+              hostPort: 8180
+          readinessProbe:
+            tcpSocket:
+              port: conf-svc-port
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: config-svc-port
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          startupProbe:
+            tcpSocket:
+              port: conf-svc-port
+            failureThreshold: 30
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

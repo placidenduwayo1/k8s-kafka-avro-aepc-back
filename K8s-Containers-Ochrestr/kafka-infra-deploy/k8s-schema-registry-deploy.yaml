@@ -29,13 +29,14 @@ spec:
           image: busybox
           command: [ '/bin/sh' ]
           args: [ '-c', 'until nc -z kafka-broker-3 9094; do echo waiting for kafka-broker-3 ready; sleep 5; done;']
-
       containers:
         - name: schema-registry-service
           image: confluentinc/cp-schema-registry:5.4.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
+              name: schema-r-port
+              hostPort: 8081
           env:
             - name: SCHEMA_REGISTRY_HOST_NAME
               valueFrom:
@@ -47,7 +48,22 @@ spec:
                 configMapKeyRef:
                   name: kafka-infra-env-variables-cm
                   key: kafka_bootstrap_servers
-      restartPolicy: Always
+          readinessProbe:
+            tcpSocket:
+              port: schema-r-port
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: schema-r-port
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          startupProbe:
+            tcpSocket:
+              port: schema-r-port
+            failureThreshold: 30
+            periodSeconds: 10
+
 ---
 apiVersion: v1
 kind: Service

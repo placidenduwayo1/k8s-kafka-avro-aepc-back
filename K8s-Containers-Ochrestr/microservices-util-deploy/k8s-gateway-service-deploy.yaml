@@ -20,14 +20,32 @@ spec:
         - name: check-configserver-ready
           image: busybox
           command: ['/bin/sh']
-          args: ['-c', 'until nslookup microservices-config-service.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for microservices-config-sever ready; sleep 5; done;']
+          args: ['-c', 'until nc -z microservices-config-service 8180; do echo waiting for microservices-config-sever ready; sleep 5; done;']
       containers:
         - name: gateway-service
           image: placidenduwayo1/gateway-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8181
-      restartPolicy: Always
+              name: gateway-port
+          readinessProbe:
+            httpGet:
+              port: gateway-port
+              path: /
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: gateway-port
+              path: /
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              port: gateway-port
+              path: /
+            failureThreshold: 30
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

@@ -22,7 +22,23 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 2181
-      restartPolicy: Always
+              name: zoo-port
+              hostPort: 2181
+          readinessProbe:
+            tcpSocket:
+              port: zoo-port
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: zoo-port
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: zoo-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
