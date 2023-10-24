@@ -8,9 +8,9 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @EnableConfigServer
 public class K8sKafkaAvroMicroservicesConfigServerApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
+		Thread.sleep(60_000);
 		new SpringApplication(K8sKafkaAvroMicroservicesConfigServerApplication.class)
 				.run(args);
 	}
-
 }

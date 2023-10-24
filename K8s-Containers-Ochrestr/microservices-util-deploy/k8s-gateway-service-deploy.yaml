@@ -20,7 +20,7 @@ spec:
         - name: check-configserver-ready
           image: busybox
           command: ['/bin/sh']
-          args: ['-c', 'until nc -z microservices-config-service 8180; do echo waiting for microservices-config-sever ready; sleep 5; done;']
+          args: ['-c', 'until nslookup microservices-config-service.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for microservices-config-sever ready; sleep 5; done;']
       containers:
         - name: gateway-service
           image: placidenduwayo1/gateway-service:latest
