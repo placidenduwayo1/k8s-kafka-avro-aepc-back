@@ -60,12 +60,12 @@ spec:
             tcpSocket:
               port: broker1-port
             initialDelaySeconds: 15
-            periodSeconds: 10
+            periodSeconds: 15
           livenessProbe:
             tcpSocket:
               port: broker1-port
             initialDelaySeconds: 15
-            periodSeconds: 10
+            periodSeconds: 15
           startupProbe:
             tcpSocket:
               port: broker1-port

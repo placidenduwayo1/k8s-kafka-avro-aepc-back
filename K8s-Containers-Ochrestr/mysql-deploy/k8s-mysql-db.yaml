@@ -79,11 +79,6 @@ spec:
               port: mysql-port
             initialDelaySeconds: 15
             periodSeconds: 10
-          startupProbe:
-            tcpSocket:
-              port: mysql-port
-            failureThreshold: 30
-            periodSeconds: 15
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

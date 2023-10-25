@@ -28,24 +28,26 @@ spec:
           ports:
             - containerPort: 8181
               name: gateway-port
+              hostPort: 8181
           readinessProbe:
             httpGet:
               port: gateway-port
               path: /
-            initialDelaySeconds: 15
-            periodSeconds: 10
+            initialDelaySeconds: 5
+            periodSeconds: 5
           livenessProbe:
             httpGet:
               port: gateway-port
               path: /
-            initialDelaySeconds: 15
-            periodSeconds: 10
+            initialDelaySeconds: 5
+            periodSeconds: 5
           startupProbe:
             httpGet:
               port: gateway-port
               path: /
-            failureThreshold: 30
-            periodSeconds: 10
+            failureThreshold: 15
+            periodSeconds: 5
+
 ---
 apiVersion: v1
 kind: Service
