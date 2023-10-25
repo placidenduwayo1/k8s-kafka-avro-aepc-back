@@ -60,19 +60,19 @@ spec:
           readinessProbe:
             httpGet:
               port: company-port
-              path: /companies
+              path: /
             initialDelaySeconds: 15
             periodSeconds: 10
           livenessProbe:
             httpGet:
               port: company-port
-              path: /companies
+              path: /
             initialDelaySeconds: 15
             periodSeconds: 10
           startupProbe:
             httpGet:
               port: company-port
-              path: /companies
+              path: /
             failureThreshold: 30
             periodSeconds: 10
           env:

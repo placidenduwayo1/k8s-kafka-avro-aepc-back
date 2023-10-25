@@ -60,19 +60,19 @@ spec:
           readinessProbe:
             httpGet:
               port: employee-port
-              path: /employees
+              path: /
             initialDelaySeconds: 15
             periodSeconds: 10
           livenessProbe:
             httpGet:
               port: employee-port
-              path: /employees
+              path: /
             initialDelaySeconds: 15
             periodSeconds: 10
           startupProbe:
             httpGet:
               port: employee-port
-              path: /employees
+              path: /
             failureThreshold: 30
             periodSeconds: 10
           env:
