@@ -121,7 +121,7 @@ public class UseCase implements InputCompanyService, InputRemoteAddressService {
         company.setName(payload.getName());
         company.setAgency(payload.getAgency());
         company.setType(payload.getType());
-        setCompanyDependency(company, company.getAddressId());
+        setCompanyDependency(company, payload.getAddressId());
         CompanyAvro companyAvro = CompanyMapper.fromBeanToAvro(company);
         return CompanyMapper.fromAvroToBean(kafkaProducerService.produceKafkaEventCompanyEdit(companyAvro));
     }
