@@ -1,6 +1,6 @@
 # Application base microservices (suite1)
 
-(NEW) In this project, we replace JsonSerializer for Kafka events by Avro and Schema-Registry for kafka events serialization
+(NEW) In this project, we replace **JsonSerializer** by **Avro** and **Schema-Registry** for kafka events serialization
 
 - application base microservices that manage addresses, employees, companies and projects. 
 - each business microservices of the application is implemented into clean architecture. 
