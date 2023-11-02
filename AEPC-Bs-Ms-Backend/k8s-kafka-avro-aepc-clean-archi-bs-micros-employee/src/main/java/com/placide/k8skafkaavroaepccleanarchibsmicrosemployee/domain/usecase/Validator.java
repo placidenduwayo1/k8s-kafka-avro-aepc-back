@@ -21,14 +21,14 @@ public class Validator {
     }
 
     public static boolean checkStateValidity(String state) {
-        boolean exits = false;
+        boolean exist = false;
         for (State iterator: State.values()){
             if(state.equals(iterator.getEmployeeState())) {
-                exits=true;
+                exist=true;
                 break;
             }
         }
-        return exits;
+        return exist;
     }
 
     public static boolean checkTypeValidity(String type) {
